@@ -8,6 +8,7 @@ public class Board {
     public ArrayList<Pawn> yelArray;
     public ArrayList<Pawn> greenArray;
 
+    // envie de tout casser
     // BONJOUUUUUUR @DalSulyvan
     Board() {
 
