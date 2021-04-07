@@ -4,6 +4,7 @@ public class Pawn {
     private boolean hasEaten;
     private int location;
 
+    // envie que ça marche
     Pawn(Color color) {
         this.color = color;
         this.isDoubled = false;
