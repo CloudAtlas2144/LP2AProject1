@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class Panel extends JPanel {
+
     public void paintComponent(Graphics g) {
         try {
             // We read the file and turn it into a usable image
@@ -24,7 +25,11 @@ public class Panel extends JPanel {
             Image bp = ImageIO.read(new File("BluePawn.png"));
             Image gp = ImageIO.read(new File("GreenPawn.png"));
             Image yp = ImageIO.read(new File("YellowPawn.png"));
-            g.drawImage(bp, (this.getWidth() / 15) * 6, 0, pawn_size, pawn_size, this);
+
+            for (int i = 0; i < 6; i++) {
+                Coordinates coordinates = UserInterface.getOnMainMap(i);
+                g.drawImage(bp, coordinates.getX(), coordinates.getY(), pawn_size, pawn_size, this);
+            }
             System.out.println(this.getWidth());
         } catch (IOException exception) {
             exception.printStackTrace();
