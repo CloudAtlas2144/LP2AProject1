@@ -1,0 +1,26 @@
+Classes :
+    Pawn
+    {
+        Color
+        Position
+            isOut (or -1 in position on board)
+            hasFinished (or special number in position)
+        Kills
+        isDoubled
+    }
+
+    Pawns
+    Die
+    Graphical Interface
+    Player
+    Board
+    {
+        1 main surrounding grid of 52 squares including 0
+        4 little boards of 5 squares
+        Special positions
+    }
+
+Enum :
+    Color 
+
+Idée : faire le même plan pour tous les joueurs et faire une rotation
