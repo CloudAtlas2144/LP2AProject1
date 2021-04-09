@@ -26,6 +26,7 @@ public class Panel extends JPanel {
         this.coordinates = new Coordinates(0, 0);
     }
 
+    // TODO : Ajouter la gestion de Home
     public void paintComponent(Graphics g) {
         if (initPanel == false) {
             InitPanel();
@@ -103,7 +104,6 @@ public class Panel extends JPanel {
                 }
             }
 
-            System.out.println(this.getWidth());
         } catch (IOException exception) {
             exception.printStackTrace();
         }
