@@ -30,4 +30,13 @@ public class Pawn {
     public boolean hasEaten() {
         return hasEaten;
     }
+
+    public void setLocation(int location) {
+        this.location = location;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
 }

@@ -12,4 +12,5 @@ public class Pawns {
             greenP[i] = new Pawn(Color.BLUE);
         }
     }
+
 }
