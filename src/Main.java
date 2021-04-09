@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        UserInterface window = new UserInterface();
+        Board board = new Board();
         System.out.println("Hello");
     }
 }

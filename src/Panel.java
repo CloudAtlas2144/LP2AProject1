@@ -10,6 +10,9 @@ import javax.swing.JPanel;
 
 public class Panel extends JPanel {
 
+    // serial version number requested by Java
+    private static final long serialVersionUID = 1L;
+
     private int cellW;
     private int cellH;
 
@@ -29,12 +32,9 @@ public class Panel extends JPanel {
             initPanel = true;
         }
         try {
-            // We read the file and turn it into a usable image
             Image ludo = ImageIO.read(new File("ludo_board1.png"));
-            // We display the image and set JPanel as the image observer
             g.drawImage(ludo, 0, 0, this.getWidth(), this.getHeight(), this);
-            // We can also not specify the image's display dimensions :
-            // g.drawImage(img, 0, 0, this);
+
             int pawn_size = this.getWidth() / 15;
             System.out.println(this.getWidth());
 
@@ -43,14 +43,64 @@ public class Panel extends JPanel {
             Image gp = ImageIO.read(new File("GreenPawn.png"));
             Image yp = ImageIO.read(new File("YellowPawn.png"));
 
-            // Test of the getOnMap() function
-            this.getOnMap(0);
-            g.drawImage(bp, this.coordinates.getX(), this.coordinates.getY(), pawn_size, pawn_size, this);
-            this.getOnMap(4);
-            g.drawImage(gp, this.coordinates.getX(), this.coordinates.getY(), pawn_size, pawn_size, this);
-            for (int i = 9; i < 52; i++) {
-                this.getOnMap(i);
-                g.drawImage(gp, this.coordinates.getX(), this.coordinates.getY(), pawn_size, pawn_size, this);
+            Image[] pawnImages = { rp, bp, gp, yp };
+
+            for (Pawn p : Board.mainArray) {
+                if (p.isDoubled() == true) {
+                    this.getOnMap(p.getLocation());
+                    g.drawImage(pawnImages[p.getColor().toInt()], this.coordinates.getX(), this.coordinates.getY(),
+                            pawn_size, pawn_size, this);
+                    g.drawImage(pawnImages[p.getColor().toInt()], this.coordinates.getX() + 4,
+                            this.coordinates.getY() + 4, pawn_size, pawn_size, this);
+                } else {
+                    this.getOnMap(p.getLocation());
+                    g.drawImage(pawnImages[p.getColor().toInt()], this.coordinates.getX(), this.coordinates.getY(),
+                            pawn_size, pawn_size, this);
+                }
+            }
+
+            for (Pawn p : Board.redArray) {
+                int x = this.cellW * (1 + p.getLocation());
+                int y = this.cellH * 7;
+                if (p.isDoubled() == true) {
+                    g.drawImage(rp, x, y, pawn_size, pawn_size, this);
+                    g.drawImage(rp, x + 4, y + 4, pawn_size, pawn_size, this);
+                } else {
+                    g.drawImage(rp, x, y, pawn_size, pawn_size, this);
+                }
+            }
+
+            for (Pawn p : Board.blueArray) {
+                int x = this.cellW * 7;
+                int y = this.cellH * (13 - p.getLocation());
+                if (p.isDoubled() == true) {
+                    g.drawImage(bp, x, y, pawn_size, pawn_size, this);
+                    g.drawImage(bp, x + 4, y + 4, pawn_size, pawn_size, this);
+                } else {
+                    g.drawImage(bp, x, y, pawn_size, pawn_size, this);
+                }
+            }
+
+            for (Pawn p : Board.greenArray) {
+                int x = this.cellW * 7;
+                int y = this.cellH * (1 + p.getLocation());
+                if (p.isDoubled() == true) {
+                    g.drawImage(gp, x, y, pawn_size, pawn_size, this);
+                    g.drawImage(gp, x + 4, y + 4, pawn_size, pawn_size, this);
+                } else {
+                    g.drawImage(gp, x, y, pawn_size, pawn_size, this);
+                }
+            }
+
+            for (Pawn p : Board.yelArray) {
+                int x = this.cellW * (13 - p.getLocation());
+                int y = this.cellH * 7;
+                if (p.isDoubled() == true) {
+                    g.drawImage(yp, x, y, pawn_size, pawn_size, this);
+                    g.drawImage(yp, x + 4, y + 4, pawn_size, pawn_size, this);
+                } else {
+                    g.drawImage(yp, x, y, pawn_size, pawn_size, this);
+                }
             }
 
             System.out.println(this.getWidth());
@@ -62,7 +112,7 @@ public class Panel extends JPanel {
     // Returns the position on the main map of the pawn depending
     // upon its position offset relative to the blue entry point
 
-    // TODO : Provide a different location depending upon the color of the pawn
+    // TODO : Trouver une solution moins cheum
     private void getOnMap(int location) {
         int x = 0;
         int y = 0;

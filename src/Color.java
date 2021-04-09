@@ -7,7 +7,7 @@ public enum Color {
         this.color = color;
     }
 
-    public int getColor() {
+    public int toInt() {
         return color;
     }
 }
