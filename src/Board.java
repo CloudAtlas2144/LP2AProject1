@@ -50,48 +50,86 @@ public class Board {
         return mainArray;
     }
 
-    // public void playerTurn(Pawns l) {
+    public void playerTurn(Pawns l) {
 
-    // int die = Die.rollDie();
-    // // faire la selection du pawn chosePawn=
-    // movePawn(chosePawn)
-    // }
+        Die die = new Die();
+        boolean test = true;
+        die.rollDie();
+        if (die.getDie() != 0) {
+            if (l.allStock() && die.getDie() >= 6) {
+                // TODO : récupérer clic sur un pawn
+                selectedPawn.location = die.getDie() - 6 + 13 * selectedPawn.getColor();
 
-    // public boolean movePawn(Pawn p, int die) {
-    // Pawn place;
-    // if (isOut(p)) {
+            } else {
+                do {
+                    // TODO : récupérer clic sur un pawn
+                    if (selectedPawn.isOut()) {
 
-    // place = isFree(p, die);
+                        if (sameCase(selectedPawn.getLocation() + die.getDie()) && selectedPawn.isDoubled() == null) { // reminder:
+                                                                                                                       // a
+                                                                                                                       // doubled
+                                                                                                                       // can't
+                                                                                                                       // move
+                                                                                                                       // when
+                                                                                                                       // a
+                                                                                                                       // simple
+                                                                                                                       // is
+                                                                                                                       // on
+                                                                                                                       // the
+                                                                                                                       // same
+                                                                                                                       // case
 
-    // if (place == null) {
+                            test = false;
 
-    // p.setLocation((p.getLocation() + die) % 52);
+                        } else {
 
-    // } else {
-    // if (place.getColor() == p.getColor()) {
-    // doublePawn(place, p); // traiter s'il s'est doublé ou non
-    // }
+                            test = movePawn(selectedPawn, die);
 
-    // }
-    // }
-    // }
-
-    public boolean isOut(Pawn p) {
-        if (p.getLocation() != -1) {
-            return true;
-        } else {
-            return false;
+                        }
+                    }
+                    if (die.getDie() == 6) {
+                        selectedPawn.setLocation(die.getDie() - 6 + 13 * selectedPawn.getColor());
+                    }
+                } while (test == false);
+            }
         }
     }
 
-    public Pawn isFree(Pawn p, int die) {
+    public boolean movePawn(Pawn p, Die die) {
+        Pawn place;
+        boolean movement = false; // check if the movement is valid
+
+        place = isFree(p, die);
+
+        if (place == null) { // the case is empty
+
+            p.setLocation((p.getLocation() + die.getDie()) % 52);
+            movement = true;
+        } else { // the case is already occupied
+            if (place.getColor() == p.getColor()) { // the case is occupied by the same color
+                movement = doublePawn(place, p);
+                if (movement == true) {
+                    p.setLocation((p.getLocation() + die.getDie()) % 52);
+                }
+            } else { // the case is occupied by an other color
+                movement = eatPawn(place, p);
+                if (movement == true) {
+                    p.setLocation((p.getLocation() + die.getDie()) % 52);
+                }
+            }
+
+        }
+        return movement;
+    }
+
+    public Pawn isFree(Pawn p, Die die) {
 
         Pawn free = null;
         int i = 0;
 
         while (!mainArray.isEmpty() && free == null) {
 
-            if (p.getLocation() + die == mainArray.get(i).getLocation()) {
+            if (p.getLocation() + die.getDie() == mainArray.get(i).getLocation()) {
                 free = mainArray.get(i);
             }
 
@@ -101,14 +139,58 @@ public class Board {
     }
 
     public boolean doublePawn(Pawn p1, Pawn p2) {
-        if (!p1.isDoubled() || !p2.isDoubled()) {
+        if (p1.isDoubled() != null && p2.isDoubled() != null) {
 
-            p1.setDoubled(true);
+            p1.setDoubled(p2);
             mainArray.remove(p2);
             return true;
         }
 
         return false;
+    }
+
+    public boolean eatPawn(Pawn p1, Pawn p2) {
+
+        if (p2.isDoubled() != null) {
+            p2.setHasEaten(true);
+
+            if (p1.isDoubled() != null) {
+                mainArray.remove(p1.isDoubled());
+                p1.isDoubled().remove();
+            }
+            mainArray.remove(p1);
+            p1.remove();
+
+            return true;
+        }
+
+        if (p1.isDoubled() == null && p2.isDoubled() == null) { // both are simple
+            mainArray.remove(p1);
+            p1.remove();
+
+            return true;
+
+        }
+
+        if (p1.isDoubled() != null && p1.isDoubled() == null) { // p1 is doubled but p2 is simple
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean sameCase(int l) {
+        int test = 0
+        for (int i = 0; i < mainArray.size(); i++) {
+            if (mainArray.get(i).getLocation() == l) {
+                test++;
+            }
+        }
+        if(test == 2){ 
+            return true;
+        }else{
+            return false;
+        }
     }
 
     // FIXME : fonction temporaire pour tester Window et Panel
