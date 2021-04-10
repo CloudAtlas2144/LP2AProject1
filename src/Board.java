@@ -50,50 +50,40 @@ public class Board {
         return mainArray;
     }
 
-    public void playerTurn(Pawns l) {
+    // public void playerTurn(Pawns l) {
 
-        Die die = new Die();
-        boolean test = true;
-        die.rollDie();
-        if (die.getDie() != 0) {
-            if (l.allStock() && die.getDie() >= 6) {
-                // TODO : récupérer clic sur un pawn
-                selectedPawn.location = die.getDie() - 6 + 13 * selectedPawn.getColor();
+    // Die die = new Die();
+    // boolean test = true;
+    // die.rollDie();
+    // if (die.getDie() != 0) {
+    // if (l.allStock() && die.getDie() >= 6) {
+    // // TODO : récupérer clic sur un pawn
+    // selectedPawn.location = die.getDie() - 6 + 13 * selectedPawn.getColor();
 
-            } else {
-                do {
-                    // TODO : récupérer clic sur un pawn
-                    if (selectedPawn.isOut()) {
+    // } else {
+    // do {
+    // // TODO : récupérer clic sur un pawn
+    // if (selectedPawn.isOut()) {
 
-                        if (sameCase(selectedPawn.getLocation() + die.getDie()) && selectedPawn.isDoubled() == null) { // reminder:
-                                                                                                                       // a
-                                                                                                                       // doubled
-                                                                                                                       // can't
-                                                                                                                       // move
-                                                                                                                       // when
-                                                                                                                       // a
-                                                                                                                       // simple
-                                                                                                                       // is
-                                                                                                                       // on
-                                                                                                                       // the
-                                                                                                                       // same
-                                                                                                                       // case
+    // if (sameCase(selectedPawn.getLocation() + die.getDie()) &&
+    // selectedPawn.isDoubled() == null) { // reminder: a doubled pawn can't move if
+    // a simple pawn is on the same case
 
-                            test = false;
+    // test = false;
 
-                        } else {
+    // } else {
 
-                            test = movePawn(selectedPawn, die);
+    // test = movePawn(selectedPawn, die);
 
-                        }
-                    }
-                    if (die.getDie() == 6) {
-                        selectedPawn.setLocation(die.getDie() - 6 + 13 * selectedPawn.getColor());
-                    }
-                } while (test == false);
-            }
-        }
-    }
+    // }
+    // }
+    // if (die.getDie() == 6) {
+    // selectedPawn.setLocation(die.getDie() - 6 + 13 * selectedPawn.getColor());
+    // }
+    // } while (test == false);
+    // }
+    // }
+    // }
 
     public boolean movePawn(Pawn p, Die die) {
         Pawn place;
@@ -180,15 +170,15 @@ public class Board {
     }
 
     public boolean sameCase(int l) {
-        int test = 0
+        int test = 0;
         for (int i = 0; i < mainArray.size(); i++) {
             if (mainArray.get(i).getLocation() == l) {
                 test++;
             }
         }
-        if(test == 2){ 
+        if (test == 2) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

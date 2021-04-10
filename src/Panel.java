@@ -47,7 +47,7 @@ public class Panel extends JPanel {
             Image[] pawnImages = { rp, bp, gp, yp };
 
             for (Pawn p : Board.mainArray) {
-                if (p.isDoubled() == true) {
+                if (p.isDoubled() == null) {
                     this.getOnMap(p.getLocation());
                     g.drawImage(pawnImages[p.getColor().toInt()], this.coordinates.getX(), this.coordinates.getY(),
                             pawn_size, pawn_size, this);
@@ -63,7 +63,7 @@ public class Panel extends JPanel {
             for (Pawn p : Board.redArray) {
                 int x = this.cellW * (1 + p.getLocation());
                 int y = this.cellH * 7;
-                if (p.isDoubled() == true) {
+                if (p.isDoubled() == null) {
                     g.drawImage(rp, x, y, pawn_size, pawn_size, this);
                     g.drawImage(rp, x + 4, y + 4, pawn_size, pawn_size, this);
                 } else {
@@ -74,7 +74,7 @@ public class Panel extends JPanel {
             for (Pawn p : Board.blueArray) {
                 int x = this.cellW * 7;
                 int y = this.cellH * (13 - p.getLocation());
-                if (p.isDoubled() == true) {
+                if (p.isDoubled() == null) {
                     g.drawImage(bp, x, y, pawn_size, pawn_size, this);
                     g.drawImage(bp, x + 4, y + 4, pawn_size, pawn_size, this);
                 } else {
@@ -85,7 +85,7 @@ public class Panel extends JPanel {
             for (Pawn p : Board.greenArray) {
                 int x = this.cellW * 7;
                 int y = this.cellH * (1 + p.getLocation());
-                if (p.isDoubled() == true) {
+                if (p.isDoubled() == null) {
                     g.drawImage(gp, x, y, pawn_size, pawn_size, this);
                     g.drawImage(gp, x + 4, y + 4, pawn_size, pawn_size, this);
                 } else {
@@ -96,7 +96,7 @@ public class Panel extends JPanel {
             for (Pawn p : Board.yelArray) {
                 int x = this.cellW * (13 - p.getLocation());
                 int y = this.cellH * 7;
-                if (p.isDoubled() == true) {
+                if (p.isDoubled() == null) {
                     g.drawImage(yp, x, y, pawn_size, pawn_size, this);
                     g.drawImage(yp, x + 4, y + 4, pawn_size, pawn_size, this);
                 } else {

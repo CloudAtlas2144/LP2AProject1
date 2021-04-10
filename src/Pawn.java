@@ -1,25 +1,25 @@
 public class Pawn {
     private Color color;
-    private boolean isDoubled;
+    private Pawn isDoubled;
     private boolean hasEaten;
     private int location;
 
     Pawn(Color color) {
         this.color = color;
-        this.isDoubled = false;
-
-        this.location = 0;
+        this.isDoubled = null;
+        this.hasEaten = false;
+        this.location = -1;
     }
 
     public int getLocation() {
         return location;
     }
 
-    public boolean isDoubled() {
+    public Pawn isDoubled() {
         return isDoubled;
     }
 
-    public void setDoubled(boolean isDoubled) {
+    public void setDoubled(Pawn isDoubled) {
         this.isDoubled = isDoubled;
     }
 
@@ -37,6 +37,26 @@ public class Pawn {
 
     public Color getColor() {
         return color;
+    }
+
+    public void duplicate(Pawn p1, Pawn p2) {
+        p2.setLocation(p1.getLocation());
+        p2.setHasEaten(p1.hasEaten);
+        p1.setDoubled(null);
+    }
+
+    public boolean isOut() {
+        if (this.location != -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void remove() {
+        this.setDoubled(null);
+        this.setHasEaten(false);
+        this.setLocation(-1);
     }
 
 }
