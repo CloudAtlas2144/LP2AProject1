@@ -16,6 +16,11 @@ public class Board {
     public static ArrayList<Pawn> yelArray;
     public static ArrayList<Pawn> greenArray;
 
+    public static Pawns pBlue; // à voir pour plus propre
+    public static Pawns pRed;
+    public static Pawns pGreen;
+    public static Pawns pYellow;
+
     private static Window window;
 
     Board() {
@@ -24,6 +29,11 @@ public class Board {
         redArray = new ArrayList<Pawn>();
         yelArray = new ArrayList<Pawn>();
         greenArray = new ArrayList<Pawn>();
+
+        pBlue = new Pawns(Color.BLUE);
+        pRed = new Pawns(Color.RED);
+        pGreen = new Pawns(Color.GREEN);
+        pYellow = new Pawns(Color.YELLOW);
 
         window = new Window();
 
@@ -50,29 +60,45 @@ public class Board {
         return mainArray;
     }
 
-    /*
-     * public void playerTurn(Pawns l) {
-     * 
-     * Die die = new Die(); boolean test = true; die.rollDie(); if (die.getDie() !=
-     * 0) { if (l.allStock() && die.getDie() >= 6) { // TODO : récupérer clic sur un
-     * pawn selectedPawn.location = die.getDie() - 6 + 13 * selectedPawn.getColor();
-     * 
-     * } else { do { // TODO : récupérer clic sur un pawn if (selectedPawn.isOut())
-     * {
-     * 
-     * if (sameCase(selectedPawn.getLocation() + die.getDie()) &&
-     * selectedPawn.isDoubled() == null) { //reminder: a doubled pawn can't move if
-     * // case a simple pawn is on the same
-     * 
-     * test = false;
-     * 
-     * } else {
-     * 
-     * test = movePawn(selectedPawn, die.getDie());
-     * 
-     * } } if (die.getDie() == 6) { selectedPawn.setLocation(die.getDie() - 6 + 13 *
-     * selectedPawn.getColor()); } } while (test == false); } } }
-     */
+    public static boolean playerTurn(Pawns l) {
+
+        Die die = new Die();
+        boolean test = true;
+        die.rollDie();
+        if (die.getDie() != 0) {
+            if (l.allStock() && die.getDie() >= 6) { // TODO : récupérer clic sur un pawn
+                selectedPawn.location = die.getDie() - 6 + 13 * selectedPawn.getColor();
+
+            } else {
+                do { // TODO : récupérer clic sur un pawn if (selectedPawn.isOut())
+                     // TODO : un pion qui gagne ne doit plus pouvoir être cliqué
+
+                    if (sameCase(selectedPawn.getLocation() + die.getDie()) && selectedPawn.isDoubled() == null) {
+                        // reminder a doubled pawn can't move
+                        // if a simple pawn is on the same
+
+                        test = false;
+
+                    } else {
+                        if (selectedPawn.getEndlocation() != -1) {
+
+                            test = selectedPawn.moveEndLocation(die.getDie());
+
+                        } else {
+
+                            test = movePawn(selectedPawn, die.getDie());
+
+                        }
+                    }
+                    if (die.getDie() == 6) {
+                        selectedPawn.setLocation(die.getDie() - 6 + 13 * selectedPawn.getColor().toInt());
+                    }
+                } while (test == false);
+            }
+
+            return l.isWin(); // check if a player have ended the game
+        }
+    }
 
     public boolean movePawn(Pawn p, int die) {
         Pawn place;
@@ -130,12 +156,12 @@ public class Board {
 
     public boolean eatPawn(Pawn p1, Pawn p2) {
 
-        if (p2.isDoubled() != null) {
+        if (p2.isDoubled() != null) { // p2 is doubles
             p2.setHasEaten(true);
 
-            if (p1.isDoubled() != null) {
-                mainArray.remove(p1.isDoubled());
-                p1.isDoubled().remove();
+            if (p1.isDoubled() != null) { // p1 is doubles
+                mainArray.remove(p1);
+                p1.duplicate();
             }
             mainArray.remove(p1);
             p1.remove();
@@ -172,15 +198,32 @@ public class Board {
         }
     }
 
-    public boolean isFinish(int die, Pawn p) {
-        boolean test = true;
+    public static Color firstToStart() {
+        int pStarter;
+        Color pStarterColor;
 
-        if (p.getLocation() + die >= 52 - p.getColor().toInt() * 13 && p.hasEaten()) {
-            p.setEndlocation(0);
-            mainArray.remove(p);
+        pRed.start();
+        pBlue.start();
+        pGreen.start();
+        pYellow.start();
+
+        pStarter = pRed.starter;
+        pStarterColor = pRed.color;
+
+        if (pStarter < pBlue.starter) {
+            pStarterColor = pBlue.color;
         }
 
-        return test;
+        if (pStarter < pGreen.starter) {
+            pStarterColor = pGreen.color;
+        }
+
+        if (pStarter < pYellow.starter) {
+            pStarterColor = pYellow.color;
+        }
+
+        return pStarterColor;
+
     }
 
     // FIXME : fonction temporaire pour tester Window et Panel
