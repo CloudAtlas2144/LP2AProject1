@@ -1,6 +1,9 @@
+import java.util.Random;
+
 public class Pawns {
     public Pawn[] pawns;
     public Color color;
+    public int starter;
 
     public Pawns(Color c) {
         this.pawns = new Pawn[4];
@@ -31,6 +34,13 @@ public class Pawns {
         }
 
         return test;
+    }
+
+    public void start() {
+        Random random = new Random();
+        // TODO : ajouter dé
+        this.starter = random.nextInt(6) + 1;
+
     }
 
 }
