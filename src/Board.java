@@ -11,6 +11,7 @@ public class Board {
     // Board, nan?
     public static ArrayList<Pawn> mainArray;
 
+    // FIXME : Are those really necessary?
     public static ArrayList<Pawn> redArray;
     public static ArrayList<Pawn> blueArray;
     public static ArrayList<Pawn> yelArray;
@@ -35,9 +36,8 @@ public class Board {
         pGreen = new Pawns(Color.GREEN);
         pYellow = new Pawns(Color.YELLOW);
 
-        window = new Window();
-
         createDummyBoard();
+        window = new Window();
     }
 
     public static ArrayList<Pawn> getBlueArray() {
@@ -62,42 +62,54 @@ public class Board {
 
     public static boolean playerTurn(Pawns l) {
 
-        Die die = new Die();
-        boolean test = true;
-        die.rollDie();
-        if (die.getDie() != 0) {
-            if (l.allStock() && die.getDie() >= 6) { // TODO : récupérer clic sur un pawn
-                selectedPawn.location = die.getDie() - 6 + 13 * selectedPawn.getColor();
+        // // FIXME : TEMPORARY WORKAROUND
+        // Pawn selectedPawn = new Pawn(Color.GREEN);
 
-            } else {
-                do { // TODO : récupérer clic sur un pawn if (selectedPawn.isOut())
-                     // TODO : un pion qui gagne ne doit plus pouvoir être cliqué
+        // Die die = new Die();
+        // boolean test = true;
+        // die.rollDie();
+        // if (die.getDie() != 0) {
+        // if (l.allStock() && die.getDie() >= 6) { // TODO : récupérer clic sur un pawn
 
-                    if (sameCase(selectedPawn.getLocation() + die.getDie()) && selectedPawn.isDoubled() == null) {
-                        // reminder a doubled pawn can't move
-                        // if a simple pawn is on the same
+        // // TODO : Je me suis permis :
+        // // selectedPawn.location = die.getDie() - 6 + 13 * selectedPawn.getColor();
+        // selectedPawn.setLocation(die.getDie() - 6 + 13 *
+        // selectedPawn.getColor().toInt());
 
-                        test = false;
+        // } else {
+        // do { // TODO : récupérer clic sur un pawn if (selectedPawn.isOut())
+        // // TODO : un pion qui gagne ne doit plus pouvoir être cliqué
 
-                    } else {
-                        if (selectedPawn.getEndlocation() != -1) {
+        // if (sameCase(selectedPawn.getLocation() + die.getDie()) &&
+        // selectedPawn.isDoubled() == null) {
+        // // reminder a doubled pawn can't move
+        // // if a simple pawn is on the same
 
-                            test = selectedPawn.moveEndLocation(die.getDie());
+        // test = false;
 
-                        } else {
+        // } else {
+        // if (selectedPawn.getEndlocation() != -1) {
 
-                            test = movePawn(selectedPawn, die.getDie());
+        // test = selectedPawn.moveEndLocation(die.getDie());
 
-                        }
-                    }
-                    if (die.getDie() == 6) {
-                        selectedPawn.setLocation(die.getDie() - 6 + 13 * selectedPawn.getColor().toInt());
-                    }
-                } while (test == false);
-            }
+        // } else {
 
-            return l.isWin(); // check if a player have ended the game
-        }
+        // test = movePawn(selectedPawn, die.getDie());
+
+        // }
+        // }
+        // if (die.getDie() == 6) {
+        // selectedPawn.setLocation(die.getDie() - 6 + 13 *
+        // selectedPawn.getColor().toInt());
+        // }
+        // } while (test == false);
+        // }
+
+        // return l.isWin(); // check if a player have ended the game
+        // }
+
+        // FIXME : TEMPORARY
+        return true;
     }
 
     public boolean movePawn(Pawn p, int die) {
@@ -228,17 +240,19 @@ public class Board {
 
     // FIXME : fonction temporaire pour tester Window et Panel
     private static void createDummyBoard() {
-        Pawn p = new Pawn(Color.BLUE);
+        Pawn p = pRed.pawns[2];
+        Pawn p2 = pBlue.pawns[1];
         mainArray.add(p);
-        for (int i = 0; i < 52; i++) {
-            p.setLocation(i);
-            window.getPanel().repaint();
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        mainArray.add(p2);
+        // for (int i = 0; i < 52; i++) {
+        // p.setLocation(i);
+        // window.getPanel().repaint();
+        // try {
+        // Thread.sleep(100);
+        // } catch (InterruptedException e) {
+        // e.printStackTrace();
+        // }
+        // }
 
         return;
     }

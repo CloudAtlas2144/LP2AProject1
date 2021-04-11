@@ -1,5 +1,7 @@
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +10,7 @@ import javax.imageio.ImageIO;
 
 import javax.swing.JPanel;
 
-public class Panel extends JPanel {
+public class Panel extends JPanel implements ActionListener {
 
     // serial version number requested by Java
     private static final long serialVersionUID = 1L;
@@ -16,19 +18,46 @@ public class Panel extends JPanel {
     private int cellW;
     private int cellH;
 
+    private JPanel container = new JPanel();
+
     private Coordinates coordinates;
     private static boolean initPanel = false;
+
+    private static int pawn_size;
+
+    private static GUIPawn[][] guiPawns = new GUIPawn[4][4];
 
     // @SulyvanDal Oui je sais c'est cheum mdr, j'y travaille
     public void InitPanel() {
         this.cellW = this.getWidth() / 15;
         this.cellH = this.getHeight() / 15;
         this.coordinates = new Coordinates(0, 0);
+
+        // RED
+        for (int i = 0; i < 4; i++) {
+            guiPawns[0][i] = new GUIPawn(pawn_size, Board.pRed.pawns[i]);
+        }
+
+        // BLUE
+        for (int i = 0; i < 4; i++) {
+            guiPawns[1][i] = new GUIPawn(pawn_size, Board.pBlue.pawns[i]);
+        }
+
+        // GREEN
+        for (int i = 0; i < 4; i++) {
+            guiPawns[2][i] = new GUIPawn(pawn_size, Board.pYellow.pawns[i]);
+        }
+
+        // YELLOW
+        for (int i = 0; i < 4; i++) {
+            guiPawns[3][i] = new GUIPawn(pawn_size, Board.pYellow.pawns[i]);
+        }
     }
 
     // TODO : Ajouter la gestion de Home
     public void paintComponent(Graphics g) {
         if (initPanel == false) {
+            pawn_size = this.getWidth() / 15;
             InitPanel();
             initPanel = true;
         }
@@ -36,76 +65,51 @@ public class Panel extends JPanel {
             Image ludo = ImageIO.read(new File("ludo_board1.png"));
             g.drawImage(ludo, 0, 0, this.getWidth(), this.getHeight(), this);
 
-            int pawn_size = this.getWidth() / 15;
-
-            Image rp = ImageIO.read(new File("RedPawn.png"));
-            Image bp = ImageIO.read(new File("BluePawn.png"));
-            Image gp = ImageIO.read(new File("GreenPawn.png"));
-            Image yp = ImageIO.read(new File("YellowPawn.png"));
-
-            Image[] pawnImages = { rp, bp, gp, yp };
+            GUIPawn pawnToDraw;
 
             for (Pawn p : Board.mainArray) {
                 if (p.isDoubled() != null) {
-                    this.getOnMap(p.getLocation());
-                    g.drawImage(pawnImages[p.getColor().toInt()], this.coordinates.getX(), this.coordinates.getY(),
-                            pawn_size, pawn_size, this);
-                    g.drawImage(pawnImages[p.getColor().toInt()], this.coordinates.getX() + 4,
-                            this.coordinates.getY() + 4, pawn_size, pawn_size, this);
+                    // TODO : Handle this part
                 } else {
-                    this.getOnMap(p.getLocation());
-                    g.drawImage(pawnImages[p.getColor().toInt()], this.coordinates.getX(), this.coordinates.getY(),
-                            pawn_size, pawn_size, this);
+                    pawnToDraw = findGUIP(p); // finds the GUIPawn containing the given Pawn
+                    pawnToDraw.addActionListener(this); // gives this class access to the events happening to this pawn
+                    this.getOnMap(pawnToDraw.getPawn().getLocation()); // stores the graphical coordinates of the pawn
+                                                                       // in Coordinates
+                    this.add(pawnToDraw);
+                    pawnToDraw.setLocation(this.coordinates.getX(), this.coordinates.getY());
                 }
             }
 
             for (Pawn p : Board.redArray) {
                 int x = this.cellW * (1 + p.getLocation());
                 int y = this.cellH * 7;
-                if (p.isDoubled() == null) {
-                    g.drawImage(rp, x, y, pawn_size, pawn_size, this);
-                    g.drawImage(rp, x + 4, y + 4, pawn_size, pawn_size, this);
-                } else {
-                    g.drawImage(rp, x, y, pawn_size, pawn_size, this);
-                }
             }
 
             for (Pawn p : Board.blueArray) {
                 int x = this.cellW * 7;
                 int y = this.cellH * (13 - p.getLocation());
-                if (p.isDoubled() == null) {
-                    g.drawImage(bp, x, y, pawn_size, pawn_size, this);
-                    g.drawImage(bp, x + 4, y + 4, pawn_size, pawn_size, this);
-                } else {
-                    g.drawImage(bp, x, y, pawn_size, pawn_size, this);
-                }
+
             }
 
             for (Pawn p : Board.greenArray) {
                 int x = this.cellW * 7;
                 int y = this.cellH * (1 + p.getLocation());
-                if (p.isDoubled() == null) {
-                    g.drawImage(gp, x, y, pawn_size, pawn_size, this);
-                    g.drawImage(gp, x + 4, y + 4, pawn_size, pawn_size, this);
-                } else {
-                    g.drawImage(gp, x, y, pawn_size, pawn_size, this);
-                }
+
             }
 
             for (Pawn p : Board.yelArray) {
                 int x = this.cellW * (13 - p.getLocation());
                 int y = this.cellH * 7;
-                if (p.isDoubled() == null) {
-                    g.drawImage(yp, x, y, pawn_size, pawn_size, this);
-                    g.drawImage(yp, x + 4, y + 4, pawn_size, pawn_size, this);
-                } else {
-                    g.drawImage(yp, x, y, pawn_size, pawn_size, this);
-                }
+
             }
 
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+    }
+
+    public void actionPerformed(ActionEvent arg0) {
+        // TODO : return the pawn on which the user has clicked
     }
 
     // Returns the position on the main map of the pawn depending
@@ -157,5 +161,16 @@ public class Panel extends JPanel {
         this.coordinates.setX(x);
         this.coordinates.setY(y);
 
+    }
+
+    private static GUIPawn findGUIP(Pawn pawn) {
+        for (int i = 0; i < 4; i++) {
+            if (guiPawns[pawn.getColor().toInt()][i].getPawn() == pawn) {
+                System.out.println("findGUIP() recognized the pawn.");
+                return guiPawns[pawn.getColor().toInt()][i];
+            }
+        }
+        System.out.println("findGUIP() could not recognize the given pawn.");
+        return new GUIPawn(pawn_size, pawn);
     }
 }
