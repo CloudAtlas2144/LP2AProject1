@@ -9,16 +9,18 @@ public class Die {
 	}
 
 	public int getDie() {
-		return this.value;
+		return rollDie();
 	}
 
 	public int rollDie() {
 		Random random = new Random();
 		int compteur = 0;
+		// TODO : ajouter pause
 		value = random.nextInt(6) + 1;
 
-		while (value == 0 % 6 && compteur < 2) { // reroll the die up to 3 times, if 3 times 6 the turn passes
+		while (value == 0 % 6 && compteur < 2) { // reroll the die until 3 times, if 3 times 6 the turn pass
 			compteur++;
+			// TODO : ajouter pause
 			value += random.nextInt(6) + 1;
 		}
 
