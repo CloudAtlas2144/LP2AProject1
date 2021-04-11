@@ -37,7 +37,6 @@ public class Panel extends JPanel {
             g.drawImage(ludo, 0, 0, this.getWidth(), this.getHeight(), this);
 
             int pawn_size = this.getWidth() / 15;
-            System.out.println(this.getWidth());
 
             Image rp = ImageIO.read(new File("RedPawn.png"));
             Image bp = ImageIO.read(new File("BluePawn.png"));
@@ -47,7 +46,7 @@ public class Panel extends JPanel {
             Image[] pawnImages = { rp, bp, gp, yp };
 
             for (Pawn p : Board.mainArray) {
-                if (p.isDoubled() == null) {
+                if (p.isDoubled() != null) {
                     this.getOnMap(p.getLocation());
                     g.drawImage(pawnImages[p.getColor().toInt()], this.coordinates.getX(), this.coordinates.getY(),
                             pawn_size, pawn_size, this);

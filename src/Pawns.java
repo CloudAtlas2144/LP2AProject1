@@ -4,6 +4,9 @@ public class Pawns {
 
     public Pawns(Color c) {
         this.pawns = new Pawn[4];
+        for (int i = 0; i < 4; i++) {
+            pawns[i] = new Pawn(c);
+        }
         this.color = c;
     }
 
@@ -14,6 +17,19 @@ public class Pawns {
                 test = false;
             }
         }
+        return test;
+    }
+
+    public boolean isWin() {
+        int i = 0;
+        boolean test = true;
+
+        while (i < 4 && test == true) { // test if all pawns are in finish situation
+            if (this.pawns[i].getEndlocation() != 6) {
+                test = false;
+            }
+        }
+
         return test;
     }
 

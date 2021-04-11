@@ -50,42 +50,31 @@ public class Board {
         return mainArray;
     }
 
-    // public void playerTurn(Pawns l) {
+    /*
+     * public void playerTurn(Pawns l) {
+     * 
+     * Die die = new Die(); boolean test = true; die.rollDie(); if (die.getDie() !=
+     * 0) { if (l.allStock() && die.getDie() >= 6) { // TODO : récupérer clic sur un
+     * pawn selectedPawn.location = die.getDie() - 6 + 13 * selectedPawn.getColor();
+     * 
+     * } else { do { // TODO : récupérer clic sur un pawn if (selectedPawn.isOut())
+     * {
+     * 
+     * if (sameCase(selectedPawn.getLocation() + die.getDie()) &&
+     * selectedPawn.isDoubled() == null) { //reminder: a doubled pawn can't move if
+     * // case a simple pawn is on the same
+     * 
+     * test = false;
+     * 
+     * } else {
+     * 
+     * test = movePawn(selectedPawn, die.getDie());
+     * 
+     * } } if (die.getDie() == 6) { selectedPawn.setLocation(die.getDie() - 6 + 13 *
+     * selectedPawn.getColor()); } } while (test == false); } } }
+     */
 
-    // Die die = new Die();
-    // boolean test = true;
-    // die.rollDie();
-    // if (die.getDie() != 0) {
-    // if (l.allStock() && die.getDie() >= 6) {
-    // // TODO : récupérer clic sur un pawn
-    // selectedPawn.location = die.getDie() - 6 + 13 * selectedPawn.getColor();
-
-    // } else {
-    // do {
-    // // TODO : récupérer clic sur un pawn
-    // if (selectedPawn.isOut()) {
-
-    // if (sameCase(selectedPawn.getLocation() + die.getDie()) &&
-    // selectedPawn.isDoubled() == null) { // reminder: a doubled pawn can't move if
-    // a simple pawn is on the same case
-
-    // test = false;
-
-    // } else {
-
-    // test = movePawn(selectedPawn, die);
-
-    // }
-    // }
-    // if (die.getDie() == 6) {
-    // selectedPawn.setLocation(die.getDie() - 6 + 13 * selectedPawn.getColor());
-    // }
-    // } while (test == false);
-    // }
-    // }
-    // }
-
-    public boolean movePawn(Pawn p, Die die) {
+    public boolean movePawn(Pawn p, int die) {
         Pawn place;
         boolean movement = false; // check if the movement is valid
 
@@ -93,18 +82,18 @@ public class Board {
 
         if (place == null) { // the case is empty
 
-            p.setLocation((p.getLocation() + die.getDie()) % 52);
+            p.setLocation((p.getLocation() + die) % 52);
             movement = true;
         } else { // the case is already occupied
             if (place.getColor() == p.getColor()) { // the case is occupied by the same color
                 movement = doublePawn(place, p);
                 if (movement == true) {
-                    p.setLocation((p.getLocation() + die.getDie()) % 52);
+                    p.setLocation((p.getLocation() + die) % 52);
                 }
             } else { // the case is occupied by an other color
                 movement = eatPawn(place, p);
                 if (movement == true) {
-                    p.setLocation((p.getLocation() + die.getDie()) % 52);
+                    p.setLocation((p.getLocation() + die) % 52);
                 }
             }
 
@@ -112,14 +101,14 @@ public class Board {
         return movement;
     }
 
-    public Pawn isFree(Pawn p, Die die) {
+    public Pawn isFree(Pawn p, int die) {
 
         Pawn free = null;
         int i = 0;
 
         while (!mainArray.isEmpty() && free == null) {
 
-            if (p.getLocation() + die.getDie() == mainArray.get(i).getLocation()) {
+            if (p.getLocation() + die == mainArray.get(i).getLocation()) {
                 free = mainArray.get(i);
             }
 
@@ -181,6 +170,17 @@ public class Board {
         } else {
             return false;
         }
+    }
+
+    public boolean isFinish(int die, Pawn p) {
+        boolean test = true;
+
+        if (p.getLocation() + die >= 52 - p.getColor().toInt() * 13 && p.hasEaten()) {
+            p.setEndlocation(0);
+            mainArray.remove(p);
+        }
+
+        return test;
     }
 
     // FIXME : fonction temporaire pour tester Window et Panel

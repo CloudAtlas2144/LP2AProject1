@@ -3,12 +3,14 @@ public class Pawn {
     private Pawn isDoubled;
     private boolean hasEaten;
     private int location;
+    private int endlocation;
 
     Pawn(Color color) {
         this.color = color;
         this.isDoubled = null;
         this.hasEaten = false;
         this.location = -1;
+        this.endlocation = -1;
     }
 
     public int getLocation() {
@@ -37,6 +39,14 @@ public class Pawn {
 
     public Color getColor() {
         return color;
+    }
+
+    public int getEndlocation() {
+        return endlocation;
+    }
+
+    public void setEndlocation(int endlocation) {
+        this.endlocation = endlocation;
     }
 
     public void duplicate(Pawn p1, Pawn p2) {
