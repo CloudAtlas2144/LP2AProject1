@@ -22,8 +22,6 @@ public class Board {
     public static Pawns pGreen;
     public static Pawns pYellow;
 
-    private static Window window;
-
     Board() {
         mainArray = new ArrayList<Pawn>();
         blueArray = new ArrayList<Pawn>();
@@ -37,7 +35,8 @@ public class Board {
         pYellow = new Pawns(Color.YELLOW);
 
         createDummyBoard();
-        window = new Window();
+        new GamePanel();
+        // TODO : LAUNCH HERE
     }
 
     public static ArrayList<Pawn> getBlueArray() {
@@ -238,21 +237,18 @@ public class Board {
 
     }
 
-    // FIXME : fonction temporaire pour tester Window et Panel
+    // FIXME : TEMPORARY WORKAROUND
     private static void createDummyBoard() {
-        Pawn p = pRed.pawns[2];
-        Pawn p2 = pBlue.pawns[1];
-        mainArray.add(p);
+        Pawn p1 = pRed.pawns[1];
+        Pawn p2 = pBlue.pawns[2];
+        Pawn p3 = pYellow.pawns[0];
+        p1.setLocation(15);
+        p2.setLocation(20);
+        p3.setLocation(21);
+
+        mainArray.add(p1);
         mainArray.add(p2);
-        // for (int i = 0; i < 52; i++) {
-        // p.setLocation(i);
-        // window.getPanel().repaint();
-        // try {
-        // Thread.sleep(100);
-        // } catch (InterruptedException e) {
-        // e.printStackTrace();
-        // }
-        // }
+        mainArray.add(p3);
 
         return;
     }
