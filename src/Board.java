@@ -1,17 +1,9 @@
 import java.util.ArrayList;
 
 public class Board {
-    // Idée : ajouter des coordonnées aux structures des pions pour connaître leur
-    // posistion sur l'image
-    // Faire des case pour déterminer facilement leur position
-    // Superposer deux images le cercle du pion avec un décalage de une ou deux
-    // unités pour symbolyser de doublage
 
-    // @SulyvanDal, je les ai mis en static comme on aura qu'une seule instance
-    // Board, nan?
     public static ArrayList<Pawn> mainArray;
 
-    // FIXME : Are those really necessary?
     public static ArrayList<Pawn> redArray;
     public static ArrayList<Pawn> blueArray;
     public static ArrayList<Pawn> yelArray;
@@ -21,6 +13,8 @@ public class Board {
     public static Pawns pRed;
     public static Pawns pGreen;
     public static Pawns pYellow;
+
+    public static GamePanel gamePanel;
 
     Board() {
         mainArray = new ArrayList<Pawn>();
@@ -35,8 +29,7 @@ public class Board {
         pYellow = new Pawns(Color.YELLOW);
 
         createDummyBoard();
-        new GamePanel();
-        // TODO : LAUNCH HERE
+        gamePanel = new GamePanel();
     }
 
     public static ArrayList<Pawn> getBlueArray() {
@@ -60,9 +53,6 @@ public class Board {
     }
 
     public static boolean playerTurn(Pawns l) {
-
-        // // FIXME : TEMPORARY WORKAROUND
-        // Pawn selectedPawn = new Pawn(Color.GREEN);
 
         // Die die = new Die();
         // boolean test = true;
@@ -242,11 +232,11 @@ public class Board {
         Pawn p1 = pRed.pawns[1];
         Pawn p2 = pBlue.pawns[2];
         Pawn p3 = pYellow.pawns[0];
-        p1.setLocation(15);
+        p1.setEndLocation(2);
         p2.setLocation(20);
         p3.setLocation(21);
 
-        mainArray.add(p1);
+        redArray.add(p1);
         mainArray.add(p2);
         mainArray.add(p3);
 

@@ -7,7 +7,7 @@ public class Pawn {
     private Pawn isDoubled;
     private boolean hasEaten;
     private int location;
-    private int endlocation;
+    private int endLocation;
 
     /** Clickable target associated to the pawn. */
     public Rectangle target;
@@ -21,7 +21,7 @@ public class Pawn {
         this.isDoubled = null;
         this.hasEaten = false;
         this.location = -1;
-        this.endlocation = -1;
+        this.endLocation = -1;
 
         loadPawnImage();
         this.gLoc = new Point(0, 0);
@@ -56,12 +56,12 @@ public class Pawn {
         return color;
     }
 
-    public int getEndlocation() {
-        return endlocation;
+    public int getEndLocation() {
+        return endLocation;
     }
 
-    public void setEndlocation(int endlocation) {
-        this.endlocation = endlocation;
+    public void setEndLocation(int endlocation) {
+        this.endLocation = endlocation;
     }
 
     public void duplicate() { // à implémenter
@@ -88,7 +88,7 @@ public class Pawn {
         boolean test = true;
 
         if (this.getLocation() + die >= 52 - this.getColor().toInt() * 13 && this.hasEaten()) {
-            this.setEndlocation(0);
+            this.setEndLocation(0);
             Board.getMainArray().remove(this);
         }
 
@@ -97,8 +97,8 @@ public class Pawn {
 
     public boolean moveEndLocation(int die) {
 
-        if ((this.getEndlocation() + die) % 6 == 0) {
-            this.setEndlocation(6);
+        if ((this.getEndLocation() + die) % 6 == 0) {
+            this.setEndLocation(6);
             return true;
         } else {
             return false;
@@ -107,7 +107,7 @@ public class Pawn {
 
     /**
      * Loads the Image file corresponding to the pawn's color and adds it to the
-     * <code>img</code> variable.
+     * {@code img} variable.
      */
     private void loadPawnImage() {
         String imgName = "";
@@ -136,5 +136,4 @@ public class Pawn {
             exception.printStackTrace();
         }
     }
-
 }
