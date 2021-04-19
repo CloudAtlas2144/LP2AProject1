@@ -84,12 +84,18 @@ public class Pawn {
         this.setLocation(-1);
     }
 
-    public boolean endBoard(int die) {
+    public boolean move(int die) {
         boolean test = true;
 
         if (this.getLocation() + die >= 52 - this.getColor().toInt() * 13 && this.hasEaten()) {
-            this.setEndLocation(0);
+
+            this.setEndlocation(this.getLocation() + die - 52 - this.getColor().toInt() * 13);
             Board.getMainArray().remove(this);
+
+        }
+        if (this.getLocation() + die >= 52 - this.getColor().toInt() * 13) {
+
+            this.location += die % 52;
         }
 
         return test;
@@ -104,6 +110,7 @@ public class Pawn {
             return false;
         }
     }
+
 
     /**
      * Loads the Image file corresponding to the pawn's color and adds it to the
@@ -136,4 +143,14 @@ public class Pawn {
             exception.printStackTrace();
         }
     }
+
+    public boolean isSafe() {
+        if (this.location == 8 % 13 || this.location == 0 % 13) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
 }

@@ -31,4 +31,12 @@ public class Die {
 		return value;
 	}
 
+	// public int rewardRoll() {
+	// Random random = new Random();
+	// int die;
+	// // TODO : ajouter pause
+	// die = random.nextInt(6) + 1;
+	// return die;
+	// }
+
 }
