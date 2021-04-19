@@ -72,7 +72,7 @@ public class GamePanel extends JPanel {
 
         Image ludo = null;
         try {
-            ludo = ImageIO.read(new File("ludo_board.png"));
+            ludo = ImageIO.read(new File("ludo_2.png"));
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -91,7 +91,6 @@ public class GamePanel extends JPanel {
         }
     }
 
-    // TODO : Optimize to make one function
     /**
      * Determines the x and y coordinates on the window of a pawn belonging to
      * {@code allPawns} and defines the position of its target. If the pawn has
