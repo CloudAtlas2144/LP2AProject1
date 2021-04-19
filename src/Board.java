@@ -1,14 +1,7 @@
 import java.util.ArrayList;
 
 public class Board {
-    // Idée : ajouter des coordonnées aux structures des pions pour connaître leur
-    // posistion sur l'image
-    // Faire des case pour déterminer facilement leur position
-    // Superposer deux images le cercle du pion avec un décalage de une ou deux
-    // unités pour symbolyser de doublage
 
-    // @SulyvanDal, je les ai mis en static comme on aura qu'une seule instance
-    // Board, nan?
     public static ArrayList<Pawn> mainArray;
 
     public static ArrayList<Pawn> redArray;
@@ -21,7 +14,7 @@ public class Board {
     public static Pawns pGreen;
     public static Pawns pYellow;
 
-    private static Window window;
+    public static GamePanel gamePanel;
 
     Board() {
         mainArray = new ArrayList<Pawn>();
@@ -35,9 +28,8 @@ public class Board {
         pGreen = new Pawns(Color.GREEN);
         pYellow = new Pawns(Color.YELLOW);
 
-        window = new Window();
-
         createDummyBoard();
+        gamePanel = new GamePanel();
     }
 
     public static ArrayList<Pawn> getBlueArray() {
@@ -61,7 +53,6 @@ public class Board {
     }
 
     public static boolean playerTurn(Pawns l) {
-
         Die die = new Die();
         boolean test = true;
         die.rollDie();
@@ -86,8 +77,8 @@ public class Board {
                             // if a simple pawn is on the same
 
                             test = false;
-
-                        } else {
+                          
+        // test = selectedPawn.moveEndLocation(die.getDie());
 
                             if (selectedPawn.getEndlocation() != -1) {
 
@@ -112,8 +103,9 @@ public class Board {
                 } while (test == false);
             }
 
-            return l.isWin(); // check if a player have ended the game
-        }
+        return l.isWin(); // check if a player have ended the game
+         }
+
     }
 
     public boolean movePawn(Pawn p, int die) {
@@ -295,20 +287,8 @@ public class Board {
 
     }
 
-    // FIXME : fonction temporaire pour tester Window et Panel
+    // FIXME : TEMPORARY WORKAROUND
     private static void createDummyBoard() {
-        Pawn p = new Pawn(Color.BLUE);
-        mainArray.add(p);
-        for (int i = 0; i < 52; i++) {
-            p.setLocation(i);
-            window.getPanel().repaint();
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
         return;
     }
 }
