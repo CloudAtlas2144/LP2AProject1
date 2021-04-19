@@ -89,7 +89,7 @@ public class Pawn {
 
         if (this.getLocation() + die >= 52 - this.getColor().toInt() * 13 && this.hasEaten()) {
 
-            this.setEndlocation(this.getLocation() + die - 52 - this.getColor().toInt() * 13);
+            this.setEndLocation(this.getLocation() + die - 52 - this.getColor().toInt() * 13);
             Board.getMainArray().remove(this);
 
         }
@@ -110,7 +110,6 @@ public class Pawn {
             return false;
         }
     }
-
 
     /**
      * Loads the Image file corresponding to the pawn's color and adds it to the

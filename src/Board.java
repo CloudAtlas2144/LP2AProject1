@@ -4,11 +4,6 @@ public class Board {
 
     public static ArrayList<Pawn> mainArray;
 
-    public static ArrayList<Pawn> redArray;
-    public static ArrayList<Pawn> blueArray;
-    public static ArrayList<Pawn> yelArray;
-    public static ArrayList<Pawn> greenArray;
-
     public static Pawns pBlue; // à voir pour plus propre
     public static Pawns pRed;
     public static Pawns pGreen;
@@ -18,10 +13,6 @@ public class Board {
 
     Board() {
         mainArray = new ArrayList<Pawn>();
-        blueArray = new ArrayList<Pawn>();
-        redArray = new ArrayList<Pawn>();
-        yelArray = new ArrayList<Pawn>();
-        greenArray = new ArrayList<Pawn>();
 
         pBlue = new Pawns(Color.BLUE);
         pRed = new Pawns(Color.RED);
@@ -30,22 +21,6 @@ public class Board {
 
         createDummyBoard();
         gamePanel = new GamePanel();
-    }
-
-    public static ArrayList<Pawn> getBlueArray() {
-        return blueArray;
-    }
-
-    public static ArrayList<Pawn> getRedArray() {
-        return redArray;
-    }
-
-    public static ArrayList<Pawn> getYelArray() {
-        return yelArray;
-    }
-
-    public static ArrayList<Pawn> getGreenArray() {
-        return greenArray;
     }
 
     public static ArrayList<Pawn> getMainArray() {
@@ -57,30 +32,33 @@ public class Board {
         boolean test = true;
         die.rollDie();
 
+        // FIXME : TEMPORARY WORKAROUND
+        Pawn selectedPawn = new Pawn(Color.RED);
+
         if (die.getDie() != 0) {
 
             if (l.allStock() && die.getDie() >= 6) { // TODO : récupérer clic sur un pawn
 
-                selectedPawn.location = die.getDie() - 6 + 13 * selectedPawn.getColor();
+                selectedPawn.setLocation(die.getDie() - 6 + 13 * selectedPawn.getColor().toInt());
 
             } else {
 
                 do { // TODO : récupérer clic sur un pawn
                      // TODO : un pion qui gagne ne doit plus pouvoir être cliqué
 
-                    if (selectedPawn.isOut) {
+                    if (selectedPawn.isOut()) {
 
                         if (sameCase(selectedPawn.getLocation() + die.getDie()) && selectedPawn.isDoubled() == null
-                                && !selectedPawn.isSafe) {
+                                && !(selectedPawn.isSafe())) {
 
                             // reminder a doubled pawn can't move
                             // if a simple pawn is on the same
 
                             test = false;
-                          
-        // test = selectedPawn.moveEndLocation(die.getDie());
 
-                            if (selectedPawn.getEndlocation() != -1) {
+                            // test = selectedPawn.moveEndLocation(die.getDie());
+
+                            if (selectedPawn.getEndLocation() != -1) {
 
                                 test = selectedPawn.moveEndLocation(die.getDie());
 
@@ -103,12 +81,14 @@ public class Board {
                 } while (test == false);
             }
 
-        return l.isWin(); // check if a player have ended the game
-         }
+            // return l.isWin(); // check if a player has finished the game
+        }
+        // FIXME : Moving line out to guarantee boolean returning
+        return l.isWin(); // check if a player has finished the game
 
     }
 
-    public boolean movePawn(Pawn p, int die) {
+    public static boolean movePawn(Pawn p, int die) {
 
         Pawn place;
         boolean movement = false; // check if the movement is valid
@@ -151,7 +131,7 @@ public class Board {
 
     }
 
-    public Pawn isFree(Pawn p, int die) {
+    public static Pawn isFree(Pawn p, int die) {
 
         Pawn free = null;
         int i = 0;
@@ -167,7 +147,7 @@ public class Board {
         return free;
     }
 
-    public boolean doublePawn(Pawn p1, Pawn p2) {
+    public static boolean doublePawn(Pawn p1, Pawn p2) {
         if (p1.isDoubled() != null && p2.isDoubled() != null) {
 
             p1.setDoubled(p2);
@@ -178,7 +158,7 @@ public class Board {
         return false;
     }
 
-    public boolean eatPawn(Pawn p1, Pawn p2) {
+    public static boolean eatPawn(Pawn p1, Pawn p2) {
 
         if (!p1.isSafe()) {
 
@@ -217,7 +197,7 @@ public class Board {
         return false;
     }
 
-    public boolean cantPass(Pawn p, int die) {// check if the pawn pass over a doubled
+    public static boolean cantPass(Pawn p, int die) {// check if the pawn pass over a doubled
         boolean test = false;
         for (int i = 0; i < mainArray.size(); i++) {
 
@@ -233,7 +213,7 @@ public class Board {
         return test;
     }
 
-    public boolean sameCase(int l) {
+    public static boolean sameCase(int l) {
 
         int test = 0;
 
