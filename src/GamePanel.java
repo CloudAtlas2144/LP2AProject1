@@ -59,8 +59,7 @@ public class GamePanel extends JPanel {
 
     /**
      * Paints the ludo game board on the screen as well as the pawns contained in
-     * {@code Board.mainArray, Board.redArray, Board.blueArray, Board.greenArray}
-     * and {@code Board.yelArray}
+     * {@code allPawns}.
      * 
      * @param g {@code Graphics} graphical context used to paint the objects
      */
@@ -90,8 +89,8 @@ public class GamePanel extends JPanel {
     }
 
     /**
-     * Determines the x and y coordinates on the window of a pawn belonging to
-     * {@code allPawns} and defines the position of its target. If the pawn has
+     * Determines the x and y coordinates on the {@code JPanel} of a pawn belonging
+     * to {@code allPawns} and defines the position of its target. If the pawn has
      * finished, its target is made unreachable
      * 
      * @see Board
