@@ -55,8 +55,6 @@ public class GamePanel extends JPanel {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
-        frame.setAlwaysOnTop(true);
     }
 
     /**

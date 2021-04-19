@@ -2,7 +2,7 @@ TASKS :
     URGENT : 
        
     PENDING :
-        - Add white areas in bases
+        - Add white areas in bases [DONE]
 
 
 Classes :
