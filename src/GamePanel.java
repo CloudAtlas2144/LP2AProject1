@@ -19,7 +19,7 @@ public class GamePanel extends JPanel {
     /** Contains a reference to the last pawn clicked by the user. */
     private Pawn selectedPawn = null;
     /** Groups all the {@code Pawns} in one variable */
-    private Pawns[] allPawns = { Board.pRed, Board.pBlue, Board.pGreen, Board.pYellow };
+    private Pawns[] allPawns = { Board.pBlue, Board.pRed, Board.pGreen, Board.pYellow };
     /** Contains the position of the stored pawns in their base. */
     private Pawn[][] storedPawns = new Pawn[4][4];
 
