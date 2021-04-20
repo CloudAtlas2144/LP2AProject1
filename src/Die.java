@@ -22,7 +22,7 @@ public class Die {
 			// TODO : ajouter pause
 			this.value += random.nextInt(6) + 1;
 			System.out.println(value);
-		} while (value == 0 % 6 && compteur < 3);
+		} while (this.value % 6 == 0 && compteur < 3);
 
 		// reroll the die up to 3 times, if 3 times 6 the turn passes
 
