@@ -7,6 +7,8 @@ TASKS :
         - Stop creating rectangles
         - Correct English mistakes
         - Use synchronized to stop checking for the selectedPawn
+        - Remove error messages
+        - Look for static die
 
 
 Classes :

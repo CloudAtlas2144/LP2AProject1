@@ -9,11 +9,17 @@ import java.awt.event.*;
  */
 public class GamePanel extends JPanel {
 
+    /** Window that displays the game board and the pawns. */
     private JFrame frame;
+    /** {@code Point} containing the position of the user's mouse. */
     private Point mouse = new Point(0, 0);
+    /** Width and height of the {@code GamePanel}. */
     final int GP_WIDTH = 600, GP_HEIGHT = 600;
+    /** Width of a cell in the window. */
     private int cellW = (int) GP_WIDTH / 15;
+    /** Height of a cell in the window. */
     private int cellH = (int) GP_HEIGHT / 15;
+    /** Size of a pawn in the window. */
     private int pSize = cellW;
 
     /** Contains a reference to the last pawn clicked by the user. */
@@ -55,6 +61,7 @@ public class GamePanel extends JPanel {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        frame.setResizable(false);
     }
 
     /**
@@ -291,7 +298,7 @@ public class GamePanel extends JPanel {
      * yet, it will be added to it.
      * 
      * @param p {@code Pawn} to find in the array
-     * @return an integer corresponding to the index of pawn
+     * @return an integer corresponding to the index of the pawn in the array
      */
     private int storePawn(Pawn p) {
         int freePosition = 0;

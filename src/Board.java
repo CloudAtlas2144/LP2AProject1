@@ -9,6 +9,7 @@ public class Board {
     public static Pawns pGreen;
     public static Pawns pYellow;
 
+    /** Reference to the current instance of {@code GamePanel}. */
     public static GamePanel gamePanel;
 
     Board() {
@@ -279,7 +280,6 @@ public class Board {
         }
 
         return pStarterColor;
-
     }
 
     // FIXME : TEMPORARY WORKAROUND
