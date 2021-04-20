@@ -19,7 +19,7 @@ public class GamePanel extends JPanel {
     /** Contains a reference to the last pawn clicked by the user. */
     private Pawn selectedPawn = null;
     /** Groups all the {@code Pawns} in one variable */
-    private Pawns[] allPawns = { Board.pRed, Board.pBlue, Board.pGreen, Board.pYellow };
+    private Pawns[] allPawns = { Board.pBlue, Board.pRed, Board.pGreen, Board.pYellow };
     /** Contains the position of the stored pawns in their base. */
     private Pawn[][] storedPawns = new Pawn[4][4];
 
@@ -102,13 +102,13 @@ public class GamePanel extends JPanel {
         /** The pawn is on its final line */
         if (pawn.getEndLocation() != -1 && pawn.getEndLocation() != 6) {
             switch (pawn.getColor().toInt()) {
-            case 0:// RED
-                pawn.gLoc.x = this.cellW * (1 + pawn.getEndLocation());
-                pawn.gLoc.y = this.cellH * 7;
-                break;
-            case 1:// BLUE
+            case 0:// BLUE
                 pawn.gLoc.x = this.cellW * 7;
                 pawn.gLoc.y = this.cellH * (13 - pawn.getEndLocation());
+                break;
+            case 1:// RED
+                pawn.gLoc.x = this.cellW * (1 + pawn.getEndLocation());
+                pawn.gLoc.y = this.cellH * 7;
                 break;
             case 2:// GREEN
                 pawn.gLoc.x = this.cellW * 7;
@@ -119,7 +119,7 @@ public class GamePanel extends JPanel {
                 pawn.gLoc.y = this.cellH * 7;
                 break;
             default:
-                System.out.println("Exception : GamePanel.getOnCMap() : Unexpected color value.");
+                System.out.println("Exception : GamePanel.getOnMap() : Unexpected color value.");
                 break;
             }
 
@@ -128,13 +128,13 @@ public class GamePanel extends JPanel {
         } /** The pawn has finished */
         else if (pawn.getEndLocation() == 6) {
             switch (pawn.getColor().toInt()) {
-            case 0:// RED
-                pawn.gLoc.x = this.cellW * 6;
-                pawn.gLoc.y = this.cellH * 7;
-                break;
-            case 1:// BLUE
+            case 0:// BLUE
                 pawn.gLoc.x = this.cellW * 7;
                 pawn.gLoc.y = this.cellH * 8;
+                break;
+            case 1:// RED
+                pawn.gLoc.x = this.cellW * 6;
+                pawn.gLoc.y = this.cellH * 7;
                 break;
             case 2:// GREEN
                 pawn.gLoc.x = this.cellW * 7;
@@ -145,7 +145,7 @@ public class GamePanel extends JPanel {
                 pawn.gLoc.y = this.cellH * 7;
                 break;
             default:
-                System.out.println("Exception : GamePanel.getOnCMap() : Unexpected color value.");
+                System.out.println("Exception : GamePanel.getOnMap() : Unexpected color value.");
                 break;
             }
             pawn.target = new Rectangle(-10, -10, 1, 1);
@@ -154,13 +154,13 @@ public class GamePanel extends JPanel {
             int x = 0, y = 0;
 
             switch (pawn.getColor().toInt()) {
-            case 0:// RED
-                x = (int) (cellW * 1.5);
-                y = (int) (cellH * 1.5);
-                break;
-            case 1:// BLUE
+            case 0:// BLUE
                 x = (int) (cellW * 1.5);
                 y = (int) (cellH * 10.5);
+                break;
+            case 1:// RED
+                x = (int) (cellW * 1.5);
+                y = (int) (cellH * 1.5);
                 break;
             case 2:// GREEN
                 x = (int) (cellW * 10.5);
@@ -309,8 +309,6 @@ public class GamePanel extends JPanel {
     /**
      * Removes a pawn from the storage zone represented by the {@code storedPawns}
      * array.
-     * </p>
-     * NOTE : MUST BE CALLED EVERYTIME A {@code Pawn} IS MOVED OUT OF ITS BASE
      * 
      * @param p {@code Pawn} to remove from the storage zone
      */

@@ -269,6 +269,17 @@ public class Board {
 
     // FIXME : TEMPORARY WORKAROUND
     private static void createDummyBoard() {
+        Pawns[] allPawns = { Board.pBlue, Board.pRed, Board.pGreen, Board.pYellow };
+        for (int i = 0; i < 4; i++) {
+            allPawns[i].pawns[0].setEndLocation(3);
+        }
+        for (int i = 0; i < 4; i++) {
+            allPawns[i].pawns[1].setLocation(0 + i * 13);
+        }
+        for (int i = 0; i < 4; i++) {
+            allPawns[i].pawns[2].setEndLocation(6);
+        }
+
         return;
     }
 }
