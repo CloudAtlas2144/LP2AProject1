@@ -119,11 +119,11 @@ public class Pawn {
         String imgName = "";
 
         switch (this.color.toInt()) {
-        case 0:// RED
-            imgName = "RedPawn.png";
-            break;
-        case 1:// BLUE
+        case 0:// BLUE
             imgName = "BluePawn.png";
+            break;
+        case 1:// RED
+            imgName = "RedPawn.png";
             break;
         case 2:// GREEN
             imgName = "GreenPawn.png";

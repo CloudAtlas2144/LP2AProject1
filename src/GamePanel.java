@@ -102,13 +102,13 @@ public class GamePanel extends JPanel {
         /** The pawn is on its final line */
         if (pawn.getEndLocation() != -1 && pawn.getEndLocation() != 6) {
             switch (pawn.getColor().toInt()) {
-            case 0:// RED
-                pawn.gLoc.x = this.cellW * (1 + pawn.getEndLocation());
-                pawn.gLoc.y = this.cellH * 7;
-                break;
-            case 1:// BLUE
+            case 0:// BLUE
                 pawn.gLoc.x = this.cellW * 7;
                 pawn.gLoc.y = this.cellH * (13 - pawn.getEndLocation());
+                break;
+            case 1:// RED
+                pawn.gLoc.x = this.cellW * (1 + pawn.getEndLocation());
+                pawn.gLoc.y = this.cellH * 7;
                 break;
             case 2:// GREEN
                 pawn.gLoc.x = this.cellW * 7;
@@ -128,13 +128,13 @@ public class GamePanel extends JPanel {
         } /** The pawn has finished */
         else if (pawn.getEndLocation() == 6) {
             switch (pawn.getColor().toInt()) {
-            case 0:// RED
-                pawn.gLoc.x = this.cellW * 6;
-                pawn.gLoc.y = this.cellH * 7;
-                break;
-            case 1:// BLUE
+            case 0:// BLUE
                 pawn.gLoc.x = this.cellW * 7;
                 pawn.gLoc.y = this.cellH * 8;
+                break;
+            case 1:// RED
+                pawn.gLoc.x = this.cellW * 6;
+                pawn.gLoc.y = this.cellH * 7;
                 break;
             case 2:// GREEN
                 pawn.gLoc.x = this.cellW * 7;
@@ -154,13 +154,13 @@ public class GamePanel extends JPanel {
             int x = 0, y = 0;
 
             switch (pawn.getColor().toInt()) {
-            case 0:// RED
-                x = (int) (cellW * 1.5);
-                y = (int) (cellH * 1.5);
-                break;
-            case 1:// BLUE
+            case 0:// BLUE
                 x = (int) (cellW * 1.5);
                 y = (int) (cellH * 10.5);
+                break;
+            case 1:// RED
+                x = (int) (cellW * 1.5);
+                y = (int) (cellH * 1.5);
                 break;
             case 2:// GREEN
                 x = (int) (cellW * 10.5);
