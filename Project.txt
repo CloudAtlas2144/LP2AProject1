@@ -1,8 +1,10 @@
 TASKS :
     URGENT : 
-       
+       - Add JOptionPanel in Pawns.start() and in Die.rollDie()
     PENDING :
         - Add white areas in bases [DONE]
+        - Stop creating rectangles
+        - Correct English mistakes
 
 
 Classes :

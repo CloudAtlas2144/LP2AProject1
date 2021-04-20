@@ -269,6 +269,8 @@ public class Board {
 
     // FIXME : TEMPORARY WORKAROUND
     private static void createDummyBoard() {
+        pBlue.pawns[0].setLocation(0);
+
         return;
     }
 }
