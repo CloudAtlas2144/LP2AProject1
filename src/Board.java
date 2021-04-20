@@ -29,22 +29,28 @@ public class Board {
 
     public static boolean playerTurn(Pawns l) {
         Die die = new Die();
-        boolean test = true;
+        boolean test = false;
         die.rollDie();
-
+        System.out.println("tour du joueur " + l.getColor());
         // FIXME : TEMPORARY WORKAROUND
         Pawn selectedPawn = new Pawn(Color.RED);
 
         if (die.getDie() != 0) {
 
-            if (l.allStock() && die.getDie() >= 6) { // TODO : récupérer clic sur un pawn
+            if (l.allStock()) {
 
-                selectedPawn.setLocation(die.getDie() - 6 + 13 * selectedPawn.getColor().toInt());
+                if (die.getDie() >= 6) {
+
+                    selectedPawn = gamePanel.getSelectedPawn(l.getColor());
+                    selectedPawn.setLocation(die.getDie() - 6 + 13 * selectedPawn.getColor().toInt());
+                    gamePanel.unstorePawn(selectedPawn);
+                }
 
             } else {
 
-                do { // TODO : récupérer clic sur un pawn
-                     // TODO : un pion qui gagne ne doit plus pouvoir être cliqué
+                do {
+
+                    selectedPawn = gamePanel.getSelectedPawn(l.getColor());
 
                     if (selectedPawn.isOut()) {
 
@@ -67,6 +73,8 @@ public class Board {
                                 test = movePawn(selectedPawn, die.getDie());
 
                             }
+                        } else {
+                            test = movePawn(selectedPawn, die.getDie());
                         }
                     } else {
 
@@ -74,6 +82,7 @@ public class Board {
 
                             selectedPawn.setLocation(die.getDie() - 6 + 13 * selectedPawn.getColor().toInt());
                             mainArray.add(selectedPawn);
+                            gamePanel.unstorePawn(selectedPawn);
 
                         }
                     }
@@ -83,6 +92,7 @@ public class Board {
 
             // return l.isWin(); // check if a player has finished the game
         }
+        gamePanel.repaint();
         // FIXME : Moving line out to guarantee boolean returning
         return l.isWin(); // check if a player has finished the game
 
@@ -251,16 +261,21 @@ public class Board {
         if (pStarter < pBlue.starter) {
 
             pStarterColor = pBlue.color;
+            pStarter = pBlue.starter;
         }
 
         if (pStarter < pGreen.starter) {
 
             pStarterColor = pGreen.color;
+            pStarter = pGreen.starter;
+
         }
 
         if (pStarter < pYellow.starter) {
 
             pStarterColor = pYellow.color;
+            pStarter = pYellow.starter;
+
         }
 
         return pStarterColor;

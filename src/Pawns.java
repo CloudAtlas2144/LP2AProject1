@@ -5,6 +5,10 @@ public class Pawns {
     public Color color;
     public int starter;
 
+    public Color getColor() {
+        return color;
+    }
+
     public Pawns(Color c) {
         this.pawns = new Pawn[4];
         for (int i = 0; i < 4; i++) {
@@ -40,6 +44,7 @@ public class Pawns {
         Random random = new Random();
         // TODO : ajouter dé
         this.starter = random.nextInt(6) + 1;
+        System.out.println(this.starter);
 
     }
 

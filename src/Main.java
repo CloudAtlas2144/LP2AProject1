@@ -6,7 +6,7 @@ public class Main {
 
         Color colorTurn = Board.firstToStart(); // the variable indicate which player have to play
         while (true) {
-
+            System.out.println("pause");
             switch (colorTurn) {
 
             case RED:
