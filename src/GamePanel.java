@@ -241,8 +241,9 @@ public class GamePanel extends JPanel {
             } else if (location < 52) {
                 x = this.cellW * (57 - location);
                 y = this.cellH * 14;
+            } else {
+                JOptionPane.showMessageDialog(null, "Unhandled Location", "Warning", JOptionPane.WARNING_MESSAGE);
             }
-
             // We set the graphical location of the pawn
             pawn.gLoc.x = x;
             pawn.gLoc.y = y;

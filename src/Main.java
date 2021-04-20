@@ -9,15 +9,15 @@ public class Main {
             System.out.println("pause");
             switch (colorTurn) {
 
-            case RED:
-
-                isEnd = Board.playerTurn(Board.pRed);
-                colorTurn = Color.BLUE;
-                break;
-
             case BLUE:
 
                 isEnd = Board.playerTurn(Board.pBlue);
+                colorTurn = Color.RED;
+                break;
+
+            case RED:
+
+                isEnd = Board.playerTurn(Board.pRed);
                 colorTurn = Color.GREEN;
                 break;
 
@@ -30,7 +30,7 @@ public class Main {
             case YELLOW:
 
                 isEnd = Board.playerTurn(Board.pYellow);
-                colorTurn = Color.RED;
+                colorTurn = Color.BLUE;
                 break;
             }
 
