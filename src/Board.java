@@ -84,15 +84,15 @@ public class Board {
                             selectedPawn.setLocation(die.getDie() - 6 + 13 * selectedPawn.getColor().toInt());
                             mainArray.add(selectedPawn);
                             gamePanel.unstorePawn(selectedPawn);
+                            test = true;
 
                         }
                     }
 
                 } while (test == false);
             }
-
-            // return l.isWin(); // check if a player has finished the game
         }
+
         gamePanel.repaint();
         // FIXME : Moving line out to guarantee boolean returning
         return l.isWin(); // check if a player has finished the game
@@ -102,56 +102,96 @@ public class Board {
     public static boolean movePawn(Pawn p, int die) {
 
         Pawn place;
-        boolean movement = false; // check if the movement is valid
-        if (p.isDoubled() != null && die % 2 == 0) {
+        boolean movement = false;
+        place = isFree(p, die);
+        if (p.isDoubled() != null) { // the pawn is doubled
 
-            place = isFree(p, die);
+            if (die % 2 == 0) { // the value of the die is even
 
-            if (!cantPass(p, die)) {
-
-                if (place == null) { // the case is empty
+                if (place == null) { // the case is free
 
                     p.move(die);
                     movement = true;
 
                 } else { // the case is already occupied
 
-                    if (place.getColor() == p.getColor()) { // the case is occupied by the same color
+                    if (!(place.getLocation() % 13 == 0 && place.getLocation() % 13 == 8)) { // the pawn don't land on a
+                                                                                             // safe case
 
-                        movement = doublePawn(place, p);
+                        if (place.getColor() != p.getColor()) { // the pawns have a different color
 
-                        if (movement == true) {
-
+                            eatPawn(place, p);
                             p.move(die);
+                            movement = true;
                         }
+                    }
+                }
+            }
+        } else { // the pawn is simple
 
-                    } else { // the case is occupied by an other color
+            if (!cantPass(p, die)) {
 
-                        movement = eatPawn(place, p);
+                if (place == null) { // the case is free
 
-                        if (movement == true) {
+                    p.move(die);
+                    movement = true;
 
-                            p.move(die);
+                } else { // the case is already occupied
+
+                    if (!(place.getLocation() % 13 == 0 && place.getLocation() % 13 == 8)) {
+                        // the pawn don't land on a safe case
+
+                        if (p.getColor() == place.getColor()) { // both have the same color
+
+                            if (place.isDoubled() == null) { // place is not a doubled
+
+                                place.setDoubled(p);
+                                movement = true;
+
+                            }
+
+                        } else { // the pawns have a different color
+
+                            if (place.isDoubled() == null) { // place is not a doubled
+
+                                eatPawn(place, p);
+                                p.move(die);
+                                movement = true;
+
+                            }
+                        }
+                    } else { // the pawns are on a safe case
+
+                        if (place.isDoubled() == null) {
+
+                            place.setDoubled(p);
+                            movement = true;
 
                         }
                     }
                 }
             }
         }
+
         return movement;
 
     }
 
     public static Pawn isFree(Pawn p, int die) {
 
-        Pawn free = null;
+        Pawn free = new Pawn(Color.BLUE);
+        free = null;
         int i = 0;
 
-        while (!mainArray.isEmpty() && free == null) {
+        while (i < mainArray.size() && free == null) {
 
             if (p.getLocation() + die == mainArray.get(i).getLocation()) {
+
                 free = mainArray.get(i);
+
             }
+
+            i++;
 
         }
 
@@ -169,43 +209,23 @@ public class Board {
         return false;
     }
 
-    public static boolean eatPawn(Pawn p1, Pawn p2) {
+    public static void eatPawn(Pawn p1, Pawn p2) {
 
-        if (!p1.isSafe()) {
+        p2.setHasEaten(true);
 
-            if (p2.isDoubled() != null) { // p2 is doubled
-                p2.setHasEaten(true);
+        if (p1.isDoubled() != null) { // p1 is a doubled
 
-                if (p1.isDoubled() != null) { // p1 is doubled
+            mainArray.remove(p1);
+            p1.remove();
+            p1.duplicate();
 
-                    mainArray.remove(p1);
-                    p1.duplicate();
-                }
+        } else { // p1 is simple
 
-                mainArray.remove(p1);
-                p1.remove();
+            mainArray.remove(p1);
+            p1.remove();
 
-                return true;
-
-            }
-
-            if (p1.isDoubled() == null && p2.isDoubled() == null) { // both are simple
-
-                mainArray.remove(p1);
-                p1.remove();
-
-                return true;
-
-            }
-
-            if (p1.isDoubled() != null && p1.isDoubled() == null) { // p1 is doubled but p2 is simple
-
-                return true;
-
-            }
         }
 
-        return false;
     }
 
     public static boolean cantPass(Pawn p, int die) {// check if the pawn pass over a doubled
@@ -224,7 +244,7 @@ public class Board {
         return test;
     }
 
-    public static boolean sameCase(int l) {
+    public static boolean sameCase(int l) { // maybe useless
 
         int test = 0;
 

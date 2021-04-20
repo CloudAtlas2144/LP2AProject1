@@ -65,6 +65,7 @@ public class Pawn {
     }
 
     public void duplicate() { // à implémenter
+
         this.isDoubled().setLocation(this.getLocation());
         this.isDoubled().setHasEaten(this.hasEaten());
         this.setDoubled(null);
@@ -84,21 +85,19 @@ public class Pawn {
         this.setLocation(-1);
     }
 
-    public boolean move(int die) {
-        boolean test = true;
+    public void move(int die) {
 
         if (this.getLocation() + die >= 52 - this.getColor().toInt() * 13 && this.hasEaten()) {
 
             this.setEndLocation(this.getLocation() + die - 52 - this.getColor().toInt() * 13);
             Board.getMainArray().remove(this);
 
-        }
-        if (this.getLocation() + die >= 52 - this.getColor().toInt() * 13) {
+        } else {
 
-            this.location += die % 52;
+            this.location = (this.location + die) % 52;
+
         }
 
-        return test;
     }
 
     public boolean moveEndLocation(int die) {
