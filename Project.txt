@@ -1,10 +1,12 @@
 TASKS :
     URGENT : 
        - Add JOptionPanel in Pawns.start() and in Die.rollDie()
+       - Add JOptionPanel to annouce the player turn
     PENDING :
         - Add white areas in bases [DONE]
         - Stop creating rectangles
         - Correct English mistakes
+        - Use synchronized to stop checking for the selectedPawn
 
 
 Classes :
