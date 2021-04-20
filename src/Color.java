@@ -1,5 +1,5 @@
 public enum Color {
-    RED(0), BLUE(1), GREEN(2), YELLOW(3);
+    BLUE(0), RED(1), GREEN(2), YELLOW(3);
 
     private final int color;
 
