@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class Pawn {
+public class Pawn implements Cloneable {
     private Color color;
     private Pawn isDoubled;
     private boolean hasEaten;
@@ -23,6 +23,17 @@ public class Pawn {
 
         this.gLoc = new Point(0, 0);
         this.target = new Rectangle(-10, -10, 1, 1);
+    }
+
+    public Pawn clone() {
+        try {
+            Pawn p = (Pawn) super.clone();
+            return p;
+
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError();
+            // TODO: handle exception
+        }
     }
 
     public int getLocation() {
@@ -68,6 +79,11 @@ public class Pawn {
         this.setDoubled(null);
     }
 
+    /**
+     * Check if the pawn is on the board
+     * 
+     * @return true if it is on the board, false if it is in the storage
+     */
     public boolean isOut() {
         if (this.location != -1) {
             return true;
@@ -76,12 +92,18 @@ public class Pawn {
         }
     }
 
+    /** remove a pawn from the board */
     public void remove() {
         this.setDoubled(null);
         this.setHasEaten(false);
         this.setLocation(-1);
     }
 
+    /**
+     * move the pawn on the correct location
+     * 
+     * @param die the value of the die
+     */
     public void move(int die) {
 
         if (this.getLocation() + die >= 52 - this.getColor().toInt() * 13 && this.hasEaten()) {
@@ -97,6 +119,12 @@ public class Pawn {
 
     }
 
+    /**
+     * Move the pawn to the correct location if it is on the home column
+     * 
+     * @param die the value of the die
+     * @return true if the pawn has moved
+     */
     public boolean moveEndLocation(int die) {
 
         if ((this.getEndLocation() + die) % 6 == 0) {
@@ -113,7 +141,38 @@ public class Pawn {
         } else {
             return false;
         }
+    }
 
+    /**
+     * Loads the Image file corresponding to the pawn's color and adds it to the
+     * {@code img} variable.
+     */
+    private void loadPawnImage() {
+        String imgName = "";
+
+        switch (this.color.toInt()) {
+        case 0:// BLUE
+            imgName = "BluePawn.png";
+            break;
+        case 1:// RED
+            imgName = "RedPawn.png";
+            break;
+        case 2:// GREEN
+            imgName = "GreenPawn.png";
+            break;
+        case 3:// YELLOW
+            imgName = "YellowPawn.png";
+            break;
+        default:
+            System.out.println("Exception : Pawn.loadPawnImage() : Unexpected color value.");
+            break;
+        }
+
+        try {
+            this.img = ImageIO.read(new File(imgName));
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
 }
