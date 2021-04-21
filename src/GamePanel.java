@@ -25,7 +25,7 @@ public class GamePanel extends JPanel {
     /** Contains a reference to the last pawn clicked by the user. */
     private Pawn selectedPawn = null;
     /** Groups all the {@code Pawns} in one variable */
-    private Pawns[] allPawns = { Board.pBlue, Board.pRed, Board.pGreen, Board.pYellow };
+    private Pawns[] allPawns = Board.allPawns;
     /** Contains the position of the stored pawns in their base. */
     private Pawn[][] storedPawns = new Pawn[4][4];
 
@@ -77,7 +77,7 @@ public class GamePanel extends JPanel {
 
         Image ludo = null;
         try {
-            ludo = ImageIO.read(new File("ludo_2.png"));
+            ludo = ImageIO.read(new File("img/ludo_2.png"));
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -296,9 +296,8 @@ public class GamePanel extends JPanel {
     }
 
     /**
-     * Verifies if the user has clicked on a pawn of the wanted color. If not, stops
-     * the running {@code Thread} for 30 milliseconds and keeps checking until the
-     * conditon is fulfilled.
+     * Verifies if the user has clicked on a pawn of the wanted color. If not, calls
+     * {@code waitForSelection()} to wait until a new pawn is clicked.
      * 
      * @param color {@code Color} of the pawn to find
      * @return the pawn selected by the user

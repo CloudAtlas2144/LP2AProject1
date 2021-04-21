@@ -10,4 +10,10 @@ public enum Color {
     public int toInt() {
         return color;
     }
+
+    public String toMixedCase() {
+        String end = this.toString().substring(1).toLowerCase();
+        String str = this.toString().substring(0, 1) + end;
+        return str;
+    }
 }

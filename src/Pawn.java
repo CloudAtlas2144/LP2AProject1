@@ -1,6 +1,4 @@
 import java.awt.*;
-import java.io.*;
-import javax.imageio.*;
 
 public class Pawn {
     private Color color;
@@ -23,7 +21,6 @@ public class Pawn {
         this.location = -1;
         this.endLocation = -1;
 
-        loadPawnImage();
         this.gLoc = new Point(0, 0);
         this.target = new Rectangle(-10, -10, 1, 1);
     }
@@ -107,38 +104,6 @@ public class Pawn {
             return true;
         } else {
             return false;
-        }
-    }
-
-    /**
-     * Loads the Image file corresponding to the pawn's color and adds it to the
-     * {@code img} variable.
-     */
-    private void loadPawnImage() {
-        String imgName = "";
-
-        switch (this.color.toInt()) {
-        case 0:// BLUE
-            imgName = "BluePawn.png";
-            break;
-        case 1:// RED
-            imgName = "RedPawn.png";
-            break;
-        case 2:// GREEN
-            imgName = "GreenPawn.png";
-            break;
-        case 3:// YELLOW
-            imgName = "YellowPawn.png";
-            break;
-        default:
-            System.out.println("Exception : Pawn.loadPawnImage() : Unexpected color value.");
-            break;
-        }
-
-        try {
-            this.img = ImageIO.read(new File(imgName));
-        } catch (Exception exception) {
-            exception.printStackTrace();
         }
     }
 

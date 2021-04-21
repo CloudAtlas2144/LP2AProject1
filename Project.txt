@@ -9,6 +9,7 @@ TASKS :
         - Use synchronized to stop checking for the selectedPawn
         - Remove error messages
         - Look for static die
+        - Relocate Pawns.start()
 
 
 Classes :

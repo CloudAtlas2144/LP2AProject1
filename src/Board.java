@@ -9,8 +9,13 @@ public class Board {
     public static Pawns pGreen;
     public static Pawns pYellow;
 
+    /** Groups all the {@code Pawns} in one variable */
+    public static Pawns[] allPawns;
+
     /** Reference to the current instance of {@code GamePanel}. */
     public static GamePanel gamePanel;
+
+    public static InfoPanel infoPanel;
 
     Board() {
         mainArray = new ArrayList<Pawn>();
@@ -20,8 +25,15 @@ public class Board {
         pGreen = new Pawns(Color.GREEN);
         pYellow = new Pawns(Color.YELLOW);
 
+        allPawns = new Pawns[4];
+        allPawns[0] = pBlue;
+        allPawns[1] = pRed;
+        allPawns[2] = pGreen;
+        allPawns[3] = pYellow;
+
         createDummyBoard();
         gamePanel = new GamePanel();
+        infoPanel = new InfoPanel();
     }
 
     public static ArrayList<Pawn> getMainArray() {
@@ -304,7 +316,6 @@ public class Board {
 
     // FIXME : TEMPORARY WORKAROUND
     private static void createDummyBoard() {
-
         return;
     }
 }
