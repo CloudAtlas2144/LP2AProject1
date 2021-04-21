@@ -49,6 +49,7 @@ public class GamePanel extends JPanel {
                         Rectangle target = allPawns[i].pawns[j].target;
                         if (target.contains(mouse)) {
                             selectedPawn = allPawns[i].pawns[j];
+                            waitForSelection(false);
                         }
                     }
                 }
@@ -263,6 +264,29 @@ public class GamePanel extends JPanel {
     }
 
     /**
+     * Uses {@code Thread} synchronization to either stop or revive the threads
+     * running this function.
+     * </p>
+     * In practice this function is used to wait for the selection of the pawn by
+     * the user.
+     * 
+     * @param stop If {@code true}, stops the running thread, if {@code false},
+     *             revives all threads stuck on that function
+     */
+    public synchronized void waitForSelection(boolean stop) {
+        if (stop) {
+            try {
+                wait();
+            } catch (InterruptedException exception) {
+                exception.printStackTrace();
+            }
+        } else {
+            notifyAll();
+        }
+
+    }
+
+    /**
      * Verifies if the user has clicked on a pawn of the wanted color. If not, stops
      * the running {@code Thread} for 30 milliseconds and keeps checking until the
      * conditon is fulfilled.
@@ -283,11 +307,7 @@ public class GamePanel extends JPanel {
                     selectedPawn = null;
                 }
             } else {
-                try {
-                    Thread.sleep(30);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                waitForSelection(true);
             }
         } while (loop);
         return pawnFound;
