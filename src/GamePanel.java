@@ -273,7 +273,7 @@ public class GamePanel extends JPanel {
      * @param stop If {@code true}, stops the running thread, if {@code false},
      *             revives all threads stuck on that function
      */
-    public synchronized void waitForSelection(boolean stop) {
+    private synchronized void waitForSelection(boolean stop) {
         if (stop) {
             try {
                 wait();
