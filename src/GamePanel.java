@@ -87,10 +87,21 @@ public class GamePanel extends JPanel {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 Pawn p = allPawns[i].pawns[j];
-                getOnMap(p);
-                g.drawImage(p.img, p.gLoc.x, p.gLoc.y, pSize, pSize, this);
-                if (p.isDoubled() != null) {
-                    g.drawImage(p.img, p.gLoc.x + 4, p.gLoc.y + 4, pSize, pSize, this);
+                /**
+                 * If the pawn is not carried by a double pawn, that is, the pawn is not
+                 * contained in the {@code isDoubled} field of another pawn, we display it
+                 */
+                if (p.getLocation() != -10) {
+                    getOnMap(p);
+                    g.drawImage(p.img, p.gLoc.x, p.gLoc.y, pSize, pSize, this);
+                    if (p.isDoubled() != null) {
+                        g.drawImage(p.img, p.gLoc.x + 4, p.gLoc.y + 4, pSize, pSize, this);
+                    }
+                } else {
+                    p.target.width = 1;
+                    p.target.height = 1;
+                    p.target.x = -10;
+                    p.target.y = -10;
                 }
             }
         }
@@ -258,9 +269,7 @@ public class GamePanel extends JPanel {
 
             // We create a target on the pawn
             pawn.target = new Rectangle(x, y, cellW, cellW);
-
         }
-
     }
 
     /**
