@@ -11,12 +11,13 @@ public class InfoPanel implements ActionListener {
 
     JPanel playerPanel;
     Image pImg = Board.allPawns[0].img;
-    String txt_turn_color = "Blue";
+    String turnText = "Blue";
     Boolean pawnSelect = false;
 
     JPanel diePanel;
     private Image[] dieImg = new Image[7];
     private int dieValue = 0;
+    String dieText = "";
 
     // JLabel player_label = new JLabel("Blue player : it's your turn",
     // JLabel.LEFT);
@@ -32,7 +33,7 @@ public class InfoPanel implements ActionListener {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 g.drawImage(pImg, 20, 20, 60, 60, this);
-                g.drawString(txt_turn_color, 100, 45);
+                g.drawString(turnText, 100, 45);
                 if (pawnSelect) {
                     g.drawString("Select a pawn to play.", 100, 65);
                 }
@@ -44,6 +45,7 @@ public class InfoPanel implements ActionListener {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 g.drawImage(dieImg[dieValue], 20, 20, 60, 60, this);
+                g.drawString(dieText, 100, 45);
 
             }
         };
@@ -66,15 +68,31 @@ public class InfoPanel implements ActionListener {
 
     }
 
-    public void showStartAttempt() {
+    public void showStartAttempt(Color color, int dieValue) {
+        frame.setTitle("First Roll");
+        pImg = Board.allPawns[color.toInt()].img;
+        turnText = color.toMixedCase() + " player : roll to start!";
+        this.dieValue = dieValue;
+        dieText = String.format("You rolled a %d!", dieValue);
+        frame.repaint();
+        try {
+            Thread.sleep(1200);
+        } catch (InterruptedException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void showStartingPlayer(Color color) {
 
     }
 
     public void showTurn(Color color, int dieValue) {
+        frame.setTitle(color.toMixedCase() + " Turn");
         pawnSelect = true;
         pImg = Board.allPawns[color.toInt()].img;
-        txt_turn_color = color.toMixedCase() + " player : it's your turn!";
+        turnText = color.toMixedCase() + " player : it's your turn!";
         this.dieValue = dieValue;
+        dieText = String.format("You rolled a %d!", dieValue);
 
         switch (color) {
         case BLUE:

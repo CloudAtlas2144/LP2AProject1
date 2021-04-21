@@ -84,9 +84,9 @@ public class Pawns {
     /** Determines if the player is the one to begin by rolling the die. */
     public void start() {
         Random random = new Random();
-        // TODO : ajouter dé
-
         this.starter = random.nextInt(6) + 1;
+
+        Board.infoPanel.showStartAttempt(color, this.starter);
         System.out.println(this.starter);
     }
 
