@@ -171,7 +171,7 @@ public class Board {
 
                             }
                         }
-                    } else { // the pawns are on a safe case
+                    } else { // the pawns land on a safe case
 
                         if (place.getColor() == p.getColor()) { // both have the same color
 

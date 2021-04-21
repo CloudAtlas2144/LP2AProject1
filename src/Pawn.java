@@ -109,9 +109,9 @@ public class Pawn implements Cloneable {
      */
     public void move(int die) {
 
-        if (this.getLocation() + die >= 52 - this.getColor().toInt() * 13 && this.hasEaten()) {
+        if (this.getLocation() + die > (50 + this.getColor().toInt() * 13) % 52 && this.hasEaten()) {
 
-            this.setEndLocation(this.getLocation() + die - 52 - this.getColor().toInt() * 13);
+            this.setEndLocation((this.getLocation() + die % 52));
             Board.getMainArray().remove(this);
 
         } else {
