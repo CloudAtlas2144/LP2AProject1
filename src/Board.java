@@ -335,6 +335,7 @@ public class Board {
 
         }
 
+        infoPanel.showStartingPlayer(pStarterColor);
         return pStarterColor;
     }
 

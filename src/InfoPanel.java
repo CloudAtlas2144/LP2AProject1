@@ -1,32 +1,36 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import javax.imageio.*;
 import java.io.*;
 import javax.swing.*;
 
-public class InfoPanel implements ActionListener {
+public class InfoPanel {
 
     JFrame frame = new JFrame();
 
     JPanel playerPanel;
     Image pImg = Board.allPawns[0].img;
     String turnText = "Blue";
-    Boolean pawnSelect = false;
+    boolean pawnSelect = false;
+    boolean pass = false;
 
     JPanel diePanel;
     private Image[] dieImg = new Image[7];
     private int dieValue = 0;
     String dieText = "";
+    boolean reRoll = false;
 
-    // JLabel player_label = new JLabel("Blue player : it's your turn",
-    // JLabel.LEFT);
-
+    /**
+     * Sets up a new {@code JFrame} providing information for the player and the
+     * value of the die.
+     */
     InfoPanel() {
-        frame.setLayout(new GridLayout(2, 0));
+        frame.setLayout(new BorderLayout());
+
         loadDieImages();
 
-        // player_label.setForeground(Color.BLACK);
+        JPanel basePanel = new JPanel();
+        basePanel.setLayout(new GridLayout(2, 0));
 
         playerPanel = new JPanel() {
             @Override
@@ -36,6 +40,8 @@ public class InfoPanel implements ActionListener {
                 g.drawString(turnText, 100, 45);
                 if (pawnSelect) {
                     g.drawString("Select a pawn to play.", 100, 65);
+                } else if (pass) {
+                    g.drawString("Turn passes...", 100, 65);
                 }
             }
         };
@@ -46,28 +52,40 @@ public class InfoPanel implements ActionListener {
                 super.paintComponent(g);
                 g.drawImage(dieImg[dieValue], 20, 20, 60, 60, this);
                 g.drawString(dieText, 100, 45);
-
+                if (reRoll) {
+                    g.drawString("Re-rolling...", 100, 65);
+                }
             }
         };
-        // player_panel.add(player_label);
-        // player_label.repaint(50, 100, 100, 100);
-        // player_label.setVerticalTextPosition(50);
 
-        frame.add(playerPanel);
-        frame.add(diePanel);
-        frame.setSize(300, 400);
+        JButton autoButton = new JButton("Auto-roll");
+        autoButton.setFocusable(false);
+
+        autoButton.addMouseListener(new MouseAdapter() {
+            public void mouseReleased(MouseEvent mouseEvent) {
+                // TODO : add code if auto-roll
+            }
+        });
+
+        frame.add(autoButton, BorderLayout.SOUTH);
+        basePanel.add(playerPanel);
+        basePanel.add(diePanel);
+
+        frame.add(basePanel);
+        frame.setSize(300, 300);
         frame.setTitle("Turn manager");
         frame.setLocationRelativeTo(null);
-
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setVisible(true);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
+    /**
+     * Displays which value the player of the given color has gotten at the start
+     * roll.
+     * 
+     * @param color    {@code Color} of the player
+     * @param dieValue value of the die rolled by the player
+     */
     public void showStartAttempt(Color color, int dieValue) {
         frame.setTitle("First Roll");
         pImg = Board.allPawns[color.toInt()].img;
@@ -82,31 +100,59 @@ public class InfoPanel implements ActionListener {
         }
     }
 
+    /**
+     * Displays which player has gotten the highest value at the start roll and thus
+     * who starts playing.
+     * 
+     * @param color {@code Color} of the player
+     */
     public void showStartingPlayer(Color color) {
-
+        frame.setTitle(color.toMixedCase() + " starts!");
+        turnText = color.toMixedCase() + " player starts playing!";
+        pImg = Board.allPawns[color.toInt()].img;
+        dieValue = 0;
+        dieText = "";
+        frame.repaint();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException exception) {
+            exception.printStackTrace();
+        }
+        frame.setLocation(Board.gamePanel.getFrame().getWidth() + Board.gamePanel.getFrame().getLocation().x,
+                Board.gamePanel.getFrame().getLocation().y);
     }
 
-    public void showTurn(Color color, int dieValue) {
+    /**
+     * Shows which player has to play.
+     * 
+     * @param color {@code Color} of the player
+     */
+    public void showTurn(Color color) {
         frame.setTitle(color.toMixedCase() + " Turn");
-        pawnSelect = true;
         pImg = Board.allPawns[color.toInt()].img;
         turnText = color.toMixedCase() + " player : it's your turn!";
+        playerPanel.repaint();
+    }
+
+    /**
+     * Shows the value of the die for a player turn.
+     * 
+     * @param dieValue value of the die
+     * @param reRoll   indicates if the player has to reroll or not
+     */
+    public void showRoll(int dieValue, boolean reRoll) {
+        pawnSelect = !reRoll;
         this.dieValue = dieValue;
         dieText = String.format("You rolled a %d!", dieValue);
+        diePanel.repaint();
+    }
 
-        switch (color) {
-        case BLUE:
-            break;
-        case RED:
-            break;
-        case GREEN:
-            break;
-        case YELLOW:
-            break;
-        default:
-            break;
-        }
-        frame.repaint();
+    /**
+     * Shows that the turn passes.
+     */
+    public void showPass() {
+        pass = true;
+        playerPanel.repaint();
     }
 
     /**

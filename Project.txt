@@ -10,6 +10,7 @@ TASKS :
         - Remove error messages
         - Look for static die
         - Relocate Pawns.start()
+        - Select a nice font for the InfoPanel
 
 
 Classes :

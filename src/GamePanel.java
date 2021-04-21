@@ -65,6 +65,10 @@ public class GamePanel extends JPanel {
         frame.setResizable(false);
     }
 
+    public JFrame getFrame() {
+        return frame;
+    }
+
     /**
      * Paints the ludo game board on the screen as well as the pawns contained in
      * {@code allPawns}.

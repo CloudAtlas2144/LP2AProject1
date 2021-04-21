@@ -1,7 +1,3 @@
-import java.awt.*;
-import java.io.*;
-import javax.imageio.*;
-import javax.swing.*;
 import java.util.Random;
 
 public class Die {
