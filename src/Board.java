@@ -27,6 +27,12 @@ public class Board {
         return mainArray;
     }
 
+    /**
+     * Manage the turn of the player, check if he plays the good pawn
+     * 
+     * @param l the player's array of pawn
+     * @return check if the player win the game at the end of the turn
+     */
     public static boolean playerTurn(Pawns l) {
         Die die = new Die();
         boolean test = false;
@@ -37,67 +43,66 @@ public class Board {
 
         if (die.getDie() != 0) {
 
-            if (l.allStock()) {
+            if (l.allStock()) { // all the pawn are in the storage
 
-                if (die.getDie() >= 6) {
+                if (die.getDie() >= 6) { // the player roll a six, he can pull one pawn out
 
                     selectedPawn = gamePanel.getSelectedPawn(l.getColor());
-                    selectedPawn.setLocation(die.getDie() - 6 + 13 * selectedPawn.getColor().toInt());
+                    selectedPawn.setLocation(13 * selectedPawn.getColor().toInt());
+                    movePawn(selectedPawn, die.getDie() - 6);
                     gamePanel.unstorePawn(selectedPawn);
+                    mainArray.add(selectedPawn);
+                    test = true;
+
                 }
-
-            } else {
-
+            } else { // there is already one pawn or more on the board
                 do {
 
                     selectedPawn = gamePanel.getSelectedPawn(l.getColor());
 
-                    if (selectedPawn.isOut()) {
+                    if (selectedPawn.isOut()) { // the pawn is on the board
 
-                        if (sameCase(selectedPawn.getLocation() + die.getDie()) && selectedPawn.isDoubled() == null
-                                && !(selectedPawn.isSafe())) {
+                        if (selectedPawn.getEndLocation() == -1) { // the pawn is on the common way
 
-                            // reminder a doubled pawn can't move
-                            // if a simple pawn is on the same
-
-                            test = false;
-
-                            // test = selectedPawn.moveEndLocation(die.getDie());
-
-                            if (selectedPawn.getEndLocation() != -1) {
-
-                                test = selectedPawn.moveEndLocation(die.getDie());
-
-                            } else {
-
-                                test = movePawn(selectedPawn, die.getDie());
-
-                            }
-                        } else {
                             test = movePawn(selectedPawn, die.getDie());
+
+                        } else { // the pawn is on the color way
+
+                            test = selectedPawn.moveEndLocation(die.getDie());
+
                         }
-                    } else {
+
+                    } else { // the pawn is in the storage
 
                         if (die.getDie() >= 6) {
-                            // TODO : problème si le pion sort et qu'il arrive sur une case occupée
-                            selectedPawn.setLocation(die.getDie() - 6 + 13 * selectedPawn.getColor().toInt());
-                            mainArray.add(selectedPawn);
+
+                            selectedPawn.setLocation(13 * selectedPawn.getColor().toInt());
+                            movePawn(selectedPawn, die.getDie() - 6);
                             gamePanel.unstorePawn(selectedPawn);
+                            mainArray.add(selectedPawn);
                             test = true;
 
                         }
                     }
 
                 } while (test == false);
+
             }
         }
 
         gamePanel.repaint();
-        // FIXME : Moving line out to guarantee boolean returning
         return l.isWin(); // check if a player has finished the game
 
     }
 
+    /**
+     * Check if the movement of the pawn is correct and manage the different
+     * possibilities (eaten, doubled,...)
+     * 
+     * @param p   the pawn to check
+     * @param die the die's value
+     * @return true if their was no problem, false if the movement can't occure
+     */
     public static boolean movePawn(Pawn p, int die) {
 
         Pawn place;
@@ -106,6 +111,8 @@ public class Board {
         if (p.isDoubled() != null) { // the pawn is doubled
 
             if (die % 2 == 0) { // the value of the die is even
+
+                die = die / 2;
 
                 if (place == null) { // the case is free
 
@@ -137,7 +144,7 @@ public class Board {
 
                 } else { // the case is already occupied
 
-                    if (!(place.getLocation() % 13 == 0 && place.getLocation() % 13 == 8)) {
+                    if (!(place.getLocation() % 13 == 0 || place.getLocation() % 13 == 8)) {
                         // the pawn don't land on a safe case
 
                         if (p.getColor() == place.getColor()) { // both have the same color
@@ -176,6 +183,13 @@ public class Board {
 
     }
 
+    /**
+     * Check if the pawn will land on a free case or not
+     * 
+     * @param p   the moving pawn
+     * @param die the die's value
+     * @return null if the case is free or the pawn on the occupied case
+     */
     public static Pawn isFree(Pawn p, int die) {
 
         Pawn free = new Pawn(Color.BLUE);
@@ -197,7 +211,16 @@ public class Board {
         return free;
     }
 
+    /**
+     * Check if a pawn can be doubled and change the different values if it is
+     * possible
+     * 
+     * @param p1 the pamn already on the case
+     * @param p2 the moving pawn
+     * @return true if the pawn was doubled
+     */
     public static boolean doublePawn(Pawn p1, Pawn p2) {
+
         if (p1.isDoubled() != null && p2.isDoubled() != null) {
 
             p1.setDoubled(p2);
@@ -208,6 +231,12 @@ public class Board {
         return false;
     }
 
+    /**
+     * Manage the differents variables if a pawn is eaten by an other
+     * 
+     * @param p1 the eaten pawn
+     * @param p2 the eater pawn
+     */
     public static void eatPawn(Pawn p1, Pawn p2) {
 
         p2.setHasEaten(true);
@@ -227,13 +256,20 @@ public class Board {
 
     }
 
+    /**
+     * Check if a pawn will pass a doubled pawn
+     * 
+     * @param p   the pawn who will moved
+     * @param die the value of the movement
+     * @return false if the pawn is not blocked, true if a doubled block the pawn
+     */
     public static boolean cantPass(Pawn p, int die) {// check if the pawn pass over a doubled
         boolean test = false;
         for (int i = 0; i < mainArray.size(); i++) {
 
             if (p.getLocation() < mainArray.get(i).getLocation() // location before the turn
                     && mainArray.get(i).getLocation() < (p.getLocation() + die) // location if the turn is complete
-                    && mainArray.get(i).isDoubled() != null) {
+                    && mainArray.get(i).isDoubled() != null && p.isDoubled() == null) {
 
                 test = true;
 
@@ -243,29 +279,11 @@ public class Board {
         return test;
     }
 
-    public static boolean sameCase(int l) { // maybe useless
-
-        int test = 0;
-
-        for (int i = 0; i < mainArray.size(); i++) {
-
-            if (mainArray.get(i).getLocation() == l) {
-
-                test++;
-            }
-        }
-
-        if (test == 2) {
-
-            return true;
-
-        } else {
-
-            return false;
-
-        }
-    }
-
+    /**
+     * the first roll of die to decide which player will start the game
+     * 
+     * @return the color of the player who start
+     */
     public static Color firstToStart() {
         int pStarter;
         Color pStarterColor;
