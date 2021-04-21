@@ -12,6 +12,11 @@ public class Die {
 		return this.value;
 	}
 
+	/**
+	 * Roll the die for a player turn with the ludo game rules
+	 * 
+	 * @return the value of the die
+	 */
 	public int rollDie() {
 		Random random = new Random();
 		int compteur = 0;
@@ -26,19 +31,11 @@ public class Die {
 
 		// reroll the die up to 3 times, if 3 times 6 the turn passes
 
-		if (value == 18) {
-			value = 0;
+		if (this.value == 18) {
+			this.value = 0;
 		}
 
 		return value;
 	}
-
-	// public int rewardRoll() {
-	// Random random = new Random();
-	// int die;
-	// // TODO : ajouter pause
-	// die = random.nextInt(6) + 1;
-	// return die;
-	// }
 
 }
