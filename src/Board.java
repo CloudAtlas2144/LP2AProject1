@@ -51,6 +51,7 @@ public class Board {
         boolean test = false;
         die.rollDie();
         System.out.println("tour du joueur " + l.getColor());
+        infoPanel.showTurn(l.getColor());
         // FIXME : TEMPORARY WORKAROUND
         Pawn selectedPawn = new Pawn(Color.RED);
 
@@ -69,6 +70,8 @@ public class Board {
                         mainArray.add(selectedPawn);
                         test = true;
 
+                    } else {
+                        infoPanel.showPass();
                     }
                 } else { // there is already one pawn or more on the board
                     do {
@@ -386,6 +389,7 @@ public class Board {
 
         if (test == 4) {
             result = false;
+            infoPanel.showPass();
         }
 
         return result;

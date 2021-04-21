@@ -24,9 +24,9 @@ public class Die {
 		do {
 
 			compteur++;
-			// entryRollPopUp();
-			// TODO : ajouter pause
-			this.value += random.nextInt(6) + 1;
+			int newRollValue = random.nextInt(6) + 1;
+			this.value += newRollValue;
+			Board.infoPanel.showRoll(newRollValue, (this.value % 6 == 0 && compteur < 3));
 			System.out.println(value);
 		} while (this.value % 6 == 0 && compteur < 3);
 
@@ -34,6 +34,8 @@ public class Die {
 
 		if (this.value == 18) {
 			this.value = 0;
+			// TODO : check is correct position for function call
+			Board.infoPanel.showPass();
 		}
 
 		return value;

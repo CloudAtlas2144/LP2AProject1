@@ -143,16 +143,30 @@ public class InfoPanel {
     public void showRoll(int dieValue, boolean reRoll) {
         pawnSelect = !reRoll;
         this.dieValue = dieValue;
+        this.reRoll = reRoll;
         dieText = String.format("You rolled a %d!", dieValue);
         diePanel.repaint();
+        if (reRoll) {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException exception) {
+                exception.printStackTrace();
+            }
+        }
     }
 
     /**
      * Shows that the turn passes.
      */
     public void showPass() {
+        pawnSelect = false;
         pass = true;
         playerPanel.repaint();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException exception) {
+            exception.printStackTrace();
+        }
     }
 
     /**
