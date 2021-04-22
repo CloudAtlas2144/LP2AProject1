@@ -1,6 +1,4 @@
 import java.awt.*;
-import java.io.*;
-import javax.imageio.*;
 
 public class Pawn implements Cloneable {
     private Color color;
@@ -23,7 +21,6 @@ public class Pawn implements Cloneable {
         this.location = -1;
         this.endLocation = -1;
 
-        loadPawnImage();
         this.gLoc = new Point(0, 0);
         this.target = new Rectangle(-10, -10, 1, 1);
     }
@@ -123,10 +120,10 @@ public class Pawn implements Cloneable {
     }
 
     /**
-     * Move the pawn to the correct location if it is on the home column
+     * Moves the pawn to its new location if it is on the home column.
      * 
      * @param die the value of the die
-     * @return true if the pawn has moved
+     * @return {@code true} if the pawn has moved
      */
     public boolean moveEndLocation(int die) {
 
@@ -138,36 +135,11 @@ public class Pawn implements Cloneable {
         }
     }
 
-    /**
-     * Loads the Image file corresponding to the pawn's color and adds it to the
-     * {@code img} variable.
-     */
-    private void loadPawnImage() {
-        String imgName = "";
-
-        switch (this.color.toInt()) {
-        case 0:// BLUE
-            imgName = "BluePawn.png";
-            break;
-        case 1:// RED
-            imgName = "RedPawn.png";
-            break;
-        case 2:// GREEN
-            imgName = "GreenPawn.png";
-            break;
-        case 3:// YELLOW
-            imgName = "YellowPawn.png";
-            break;
-        default:
-            System.out.println("Exception : Pawn.loadPawnImage() : Unexpected color value.");
-            break;
-        }
-
-        try {
-            this.img = ImageIO.read(new File(imgName));
-        } catch (Exception exception) {
-            exception.printStackTrace();
+    public boolean isSafe() {
+        if (this.location == 8 % 13 || this.location == 0 % 13) {
+            return true;
+        } else {
+            return false;
         }
     }
-
 }

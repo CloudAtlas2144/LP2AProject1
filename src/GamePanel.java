@@ -5,21 +5,29 @@ import javax.swing.*;
 import java.awt.event.*;
 
 /**
- * Class responsible for handling the Graphical User Interface of the game.
+ * Class responsible for handling the {@code JFrame} displaying the board of the
+ * game as well as the pawn. This class also handles the interactions with the
+ * pawns.
  */
 public class GamePanel extends JPanel {
 
+    /** Window that displays the game board and the pawns. */
     private JFrame frame;
+    /** {@code Point} containing the position of the user's mouse. */
     private Point mouse = new Point(0, 0);
+    /** Width and height of the {@code GamePanel}. */
     final int GP_WIDTH = 600, GP_HEIGHT = 600;
+    /** Width of a cell in the window. */
     private int cellW = (int) GP_WIDTH / 15;
+    /** Height of a cell in the window. */
     private int cellH = (int) GP_HEIGHT / 15;
+    /** Size of a pawn in the window. */
     private int pSize = cellW;
 
     /** Contains a reference to the last pawn clicked by the user. */
     private Pawn selectedPawn = null;
     /** Groups all the {@code Pawns} in one variable */
-    private Pawns[] allPawns = { Board.pBlue, Board.pRed, Board.pGreen, Board.pYellow };
+    private Pawns[] allPawns = Board.allPawns;
     /** Contains the position of the stored pawns in their base. */
     private Pawn[][] storedPawns = new Pawn[4][4];
 
@@ -43,6 +51,7 @@ public class GamePanel extends JPanel {
                         Rectangle target = allPawns[i].pawns[j].target;
                         if (target.contains(mouse)) {
                             selectedPawn = allPawns[i].pawns[j];
+                            waitForSelection(false);
                         }
                     }
                 }
@@ -55,6 +64,11 @@ public class GamePanel extends JPanel {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        frame.setResizable(false);
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 
     /**
@@ -69,7 +83,7 @@ public class GamePanel extends JPanel {
 
         Image ludo = null;
         try {
-            ludo = ImageIO.read(new File("ludo_2.png"));
+            ludo = ImageIO.read(new File("img/ludo_2.png"));
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -79,10 +93,20 @@ public class GamePanel extends JPanel {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 Pawn p = allPawns[i].pawns[j];
-                getOnMap(p);
-                g.drawImage(p.img, p.gLoc.x, p.gLoc.y, pSize, pSize, this);
-                if (p.isDoubled() != null) {
-                    g.drawImage(p.img, p.gLoc.x + 4, p.gLoc.y + 4, pSize, pSize, this);
+
+                // If the pawn is not carried by a double pawn, that is, the pawn is not
+                // contained in the {@code isDoubled} field of another pawn, we display it
+                if (p.getLocation() != -10) {
+                    getOnMap(p);
+                    g.drawImage(p.img, p.gLoc.x, p.gLoc.y, pSize, pSize, this);
+                    if (p.isDoubled() != null) {
+                        g.drawImage(p.img, p.gLoc.x + 4, p.gLoc.y + 4, pSize, pSize, this);
+                    }
+                } else {
+                    p.target.width = 1;
+                    p.target.height = 1;
+                    p.target.x = -10;
+                    p.target.y = -10;
                 }
             }
         }
@@ -99,22 +123,22 @@ public class GamePanel extends JPanel {
      */
     private void getOnMap(Pawn pawn) {
 
-        /** The pawn is on its final line */
+        // The pawn is on its final line
         if (pawn.getEndLocation() != -1 && pawn.getEndLocation() != 6) {
-            switch (pawn.getColor().toInt()) {
-            case 0:// BLUE
+            switch (pawn.getColor()) {
+            case BLUE:
                 pawn.gLoc.x = this.cellW * 7;
                 pawn.gLoc.y = this.cellH * (13 - pawn.getEndLocation());
                 break;
-            case 1:// RED
+            case RED:
                 pawn.gLoc.x = this.cellW * (1 + pawn.getEndLocation());
                 pawn.gLoc.y = this.cellH * 7;
                 break;
-            case 2:// GREEN
+            case GREEN:
                 pawn.gLoc.x = this.cellW * 7;
                 pawn.gLoc.y = this.cellH * (1 + pawn.getEndLocation());
                 break;
-            case 3:// YELLOW
+            case YELLOW:
                 pawn.gLoc.x = this.cellW * (13 - pawn.getEndLocation());
                 pawn.gLoc.y = this.cellH * 7;
                 break;
@@ -127,20 +151,20 @@ public class GamePanel extends JPanel {
 
         } /** The pawn has finished */
         else if (pawn.getEndLocation() == 6) {
-            switch (pawn.getColor().toInt()) {
-            case 0:// BLUE
+            switch (pawn.getColor()) {
+            case BLUE:
                 pawn.gLoc.x = this.cellW * 7;
                 pawn.gLoc.y = this.cellH * 8;
                 break;
-            case 1:// RED
+            case RED:
                 pawn.gLoc.x = this.cellW * 6;
                 pawn.gLoc.y = this.cellH * 7;
                 break;
-            case 2:// GREEN
+            case GREEN:
                 pawn.gLoc.x = this.cellW * 7;
                 pawn.gLoc.y = this.cellH * 6;
                 break;
-            case 3:// YELLOW
+            case YELLOW:
                 pawn.gLoc.x = this.cellW * 8;
                 pawn.gLoc.y = this.cellH * 7;
                 break;
@@ -153,20 +177,20 @@ public class GamePanel extends JPanel {
         else if (pawn.getLocation() == -1) {
             int x = 0, y = 0;
 
-            switch (pawn.getColor().toInt()) {
-            case 0:// BLUE
+            switch (pawn.getColor()) {
+            case BLUE:
                 x = (int) (cellW * 1.5);
                 y = (int) (cellH * 10.5);
                 break;
-            case 1:// RED
+            case RED:
                 x = (int) (cellW * 1.5);
                 y = (int) (cellH * 1.5);
                 break;
-            case 2:// GREEN
+            case GREEN:
                 x = (int) (cellW * 10.5);
                 y = (int) (cellH * 1.5);
                 break;
-            case 3:// YELLOW
+            case YELLOW:
                 x = (int) (cellW * 10.5);
                 y = (int) (cellH * 10.5);
                 break;
@@ -250,15 +274,35 @@ public class GamePanel extends JPanel {
 
             // We create a target on the pawn
             pawn.target = new Rectangle(x, y, cellW, cellW);
+        }
+    }
 
+    /**
+     * Uses {@code Thread} synchronization to either stop or revive the threads
+     * running this function.
+     * </p>
+     * In practice this function is used to wait for the selection of the pawn by
+     * the user.
+     * 
+     * @param stop If {@code true}, stops the running thread, if {@code false},
+     *             revives all threads stuck on that function
+     */
+    private synchronized void waitForSelection(boolean stop) {
+        if (stop) {
+            try {
+                wait();
+            } catch (InterruptedException exception) {
+                exception.printStackTrace();
+            }
+        } else {
+            notifyAll();
         }
 
     }
 
     /**
-     * Verifies if the user has clicked on a pawn of the wanted color. If not, stops
-     * the running {@code Thread} for 30 milliseconds and keeps checking until the
-     * conditon is fulfilled.
+     * Verifies if the user has clicked on a pawn of the wanted color. If not, calls
+     * {@code waitForSelection()} to wait until a new pawn is clicked.
      * 
      * @param color {@code Color} of the pawn to find
      * @return the pawn selected by the user
@@ -276,11 +320,7 @@ public class GamePanel extends JPanel {
                     selectedPawn = null;
                 }
             } else {
-                try {
-                    Thread.sleep(30);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                waitForSelection(true);
             }
         } while (loop);
         return pawnFound;
@@ -292,7 +332,7 @@ public class GamePanel extends JPanel {
      * yet, it will be added to it.
      * 
      * @param p {@code Pawn} to find in the array
-     * @return an integer corresponding to the index of pawn
+     * @return an integer corresponding to the index of the pawn in the array
      */
     private int storePawn(Pawn p) {
         int freePosition = 0;

@@ -9,7 +9,13 @@ public class Board {
     public static Pawns pGreen;
     public static Pawns pYellow;
 
+    /** Groups all the {@code Pawns} in one variable */
+    public static Pawns[] allPawns;
+
+    /** Reference to the current instance of {@code GamePanel}. */
     public static GamePanel gamePanel;
+
+    public static InfoPanel infoPanel;
 
     Board() {
         mainArray = new ArrayList<Pawn>();
@@ -19,8 +25,15 @@ public class Board {
         pGreen = new Pawns(Color.GREEN);
         pYellow = new Pawns(Color.YELLOW);
 
+        allPawns = new Pawns[4];
+        allPawns[0] = pBlue;
+        allPawns[1] = pRed;
+        allPawns[2] = pGreen;
+        allPawns[3] = pYellow;
+
         createDummyBoard();
         gamePanel = new GamePanel();
+        infoPanel = new InfoPanel();
     }
 
     public static ArrayList<Pawn> getMainArray() {
@@ -38,6 +51,7 @@ public class Board {
         boolean test = false;
         die.rollDie();
         System.out.println("tour du joueur " + l.getColor());
+        infoPanel.showTurn(l.getColor());
         // FIXME : TEMPORARY WORKAROUND
         Pawn selectedPawn = new Pawn(Color.RED);
 
@@ -56,6 +70,8 @@ public class Board {
                         mainArray.add(selectedPawn);
                         test = true;
 
+                    } else {
+                        infoPanel.showPass();
                     }
                 } else { // there is already one pawn or more on the board
                     do {
@@ -322,8 +338,8 @@ public class Board {
 
         }
 
+        infoPanel.showStartingPlayer(pStarterColor);
         return pStarterColor;
-
     }
 
     /**
@@ -373,6 +389,7 @@ public class Board {
 
         if (test == 4) {
             result = false;
+            infoPanel.showPass();
         }
 
         return result;
@@ -460,7 +477,6 @@ public class Board {
 
     // FIXME : TEMPORARY WORKAROUND
     private static void createDummyBoard() {
-
         return;
     }
 }
