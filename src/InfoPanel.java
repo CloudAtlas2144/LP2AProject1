@@ -4,21 +4,51 @@ import javax.imageio.*;
 import java.io.*;
 import javax.swing.*;
 
+/**
+ * Class responsible for handling the {@code JFrame} displaying information
+ * about the player turn and the value of the die.
+ */
 public class InfoPanel {
 
-    JFrame frame = new JFrame();
+    /** Window that displays the different elements. */
+    private JFrame frame = new JFrame();
 
-    JPanel playerPanel;
-    Image pImg = Board.allPawns[0].img;
-    String turnText = "Blue";
-    boolean pawnSelect = false;
-    boolean pass = false;
+    /** Waiting time after a turn pass or a die re-roll. */
+    private int waitTime = 2000;
 
-    JPanel diePanel;
+    /** {@code JPanel} displaying information about the player turn. */
+    private JPanel playerPanel;
+    /** {@code Color} of the current turn. */
+    private Color currentColor;
+    /** {@code Image} variable containing the icon of the current turn color. */
+    private Image pImg = Board.allPawns[0].img;
+    /** {@code String} holding information for the player. */
+    private String turnText = "";
+    /**
+     * {@code true} if the player is allowed to select a pawn, {@code false}
+     * otherwise.
+     */
+    private boolean pawnSelect = false;
+    /** {@code true} if the turn is about to pass, {@code false} otherwise. */
+    private boolean pass = false;
+
+    /** {@code JButton} allowing the user to speed up the game notifications. */
+    private JButton autoButton;
+
+    /** {@code JPanel} displaying information about the die. */
+    private JPanel diePanel;
+    /** {@code Image} array containing the icons of the different die faces. */
     private Image[] dieImg = new Image[7];
+    /** Holds the value of the die to display. */
     private int dieValue = 0;
-    String dieText = "";
-    boolean reRoll = false;
+    /** {@code String} telling the user the die value he rolled. */
+    private String dieText = "";
+    /** Contains the sum of the consecutives die rolls in case of a re-roll. */
+    private int dieTotalValue;
+    /**
+     * {@code true} if the player has to re-roll the die, {@code false} otherwise.
+     */
+    private boolean reRoll = false;
 
     /**
      * Sets up a new {@code JFrame} providing information for the player and the
@@ -26,9 +56,9 @@ public class InfoPanel {
      */
     InfoPanel() {
         frame.setLayout(new BorderLayout());
-
         loadDieImages();
 
+        /** Panel holding the {@code playerPanel} and the {@code diePanel}. */
         JPanel basePanel = new JPanel();
         basePanel.setLayout(new GridLayout(2, 0));
 
@@ -52,22 +82,34 @@ public class InfoPanel {
                 super.paintComponent(g);
                 g.drawImage(dieImg[dieValue], 20, 20, 60, 60, this);
                 g.drawString(dieText, 100, 45);
+                int offset = 20;
+                if (dieTotalValue != 0) {
+                    g.drawString("Die total value : " + dieTotalValue, 100, 45 + offset);
+                    offset += 20;
+                }
                 if (reRoll) {
-                    g.drawString("Re-rolling...", 100, 65);
+                    g.drawString("Re-rolling...", 100, 45 + offset);
+
                 }
             }
         };
 
-        JButton autoButton = new JButton("Auto-roll");
+        autoButton = new JButton("I don't have time!");
         autoButton.setFocusable(false);
 
         autoButton.addMouseListener(new MouseAdapter() {
+            /**
+             * If the button is clicked we set the value of {@code waitTime} to 0, this has
+             * as an effect to skip all animations where no user reaction is required.
+             */
             public void mouseReleased(MouseEvent mouseEvent) {
-                // TODO : add code if auto-roll
+                waitTime = 0;
+                autoButton.setEnabled(false);
             }
         });
 
         frame.add(autoButton, BorderLayout.SOUTH);
+
         basePanel.add(playerPanel);
         basePanel.add(diePanel);
 
@@ -89,9 +131,10 @@ public class InfoPanel {
     public void showStartAttempt(Color color, int dieValue) {
         frame.setTitle("First Roll");
         pImg = Board.allPawns[color.toInt()].img;
-        turnText = color.toMixedCase() + " player : roll to start!";
+        turnText = color.toCamelCase() + " player : roll to start!";
         this.dieValue = dieValue;
         dieText = String.format("You rolled a %d!", dieValue);
+        autoButton.setEnabled(false);
         frame.repaint();
         try {
             Thread.sleep(1200);
@@ -107,12 +150,12 @@ public class InfoPanel {
      * @param color {@code Color} of the player
      */
     public void showStartingPlayer(Color color) {
-        frame.setTitle(color.toMixedCase() + " starts!");
-        turnText = color.toMixedCase() + " player starts playing!";
+        turnText = color.toCamelCase() + " player starts playing!";
         pImg = Board.allPawns[color.toInt()].img;
         dieValue = 0;
         dieText = "";
         frame.repaint();
+        frame.setTitle(color.toCamelCase() + " starts!");
         try {
             Thread.sleep(2000);
         } catch (InterruptedException exception) {
@@ -120,35 +163,46 @@ public class InfoPanel {
         }
         frame.setLocation(Board.gamePanel.getFrame().getWidth() + Board.gamePanel.getFrame().getLocation().x,
                 Board.gamePanel.getFrame().getLocation().y);
+        autoButton.setEnabled(true);
     }
 
     /**
-     * Shows which player has to play.
+     * Shows which player has to play without stoping the running {@code Thread}.
      * 
      * @param color {@code Color} of the player
      */
     public void showTurn(Color color) {
-        frame.setTitle(color.toMixedCase() + " Turn");
         pImg = Board.allPawns[color.toInt()].img;
-        turnText = color.toMixedCase() + " player : it's your turn!";
+        turnText = color.toCamelCase() + " player : it's your turn!";
+        currentColor = color;
         playerPanel.repaint();
+        frame.setTitle(color.toCamelCase() + " Turn");
     }
 
     /**
-     * Shows the value of the die for a player turn.
+     * Shows the value of the die for a player turn, refreshes the lower part of the
+     * {@code JFrame}, and waits for the number of seconds indicated in
+     * {@code waitTime}. If the player has launched several times, it will also
+     * display the total value of the die.
      * 
-     * @param dieValue value of the die
-     * @param reRoll   indicates if the player has to reroll or not
+     * @param dieValue      value of the die
+     * @param reRoll        indicates if the player has to reroll or not
+     * @param dieTotalValue total value of the die
      */
-    public void showRoll(int dieValue, boolean reRoll) {
+    public void showRoll(int dieValue, boolean reRoll, int dieTotalValue) {
         pawnSelect = !reRoll;
         this.dieValue = dieValue;
         this.reRoll = reRoll;
         dieText = String.format("You rolled a %d!", dieValue);
+        if (dieTotalValue > dieValue) {
+            this.dieTotalValue = dieTotalValue;
+        } else {
+            this.dieTotalValue = 0;
+        }
         diePanel.repaint();
         if (reRoll) {
             try {
-                Thread.sleep(3000);
+                Thread.sleep(waitTime);
             } catch (InterruptedException exception) {
                 exception.printStackTrace();
             }
@@ -156,17 +210,19 @@ public class InfoPanel {
     }
 
     /**
-     * Shows that the turn passes.
+     * Shows that the turn passes and and waits for the number of seconds indicated
+     * in {@code waitTime}.
      */
     public void showPass() {
         pawnSelect = false;
         pass = true;
         playerPanel.repaint();
         try {
-            Thread.sleep(3000);
+            Thread.sleep(waitTime);
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         }
+        showTurn(currentColor.next());
     }
 
     /**

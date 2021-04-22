@@ -120,10 +120,10 @@ public class Pawn implements Cloneable {
     }
 
     /**
-     * Move the pawn to the correct location if it is on the home column
+     * Moves the pawn to its new location if it is on the home column.
      * 
      * @param die the value of the die
-     * @return true if the pawn has moved
+     * @return {@code true} if the pawn has moved
      */
     public boolean moveEndLocation(int die) {
 

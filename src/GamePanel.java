@@ -5,7 +5,9 @@ import javax.swing.*;
 import java.awt.event.*;
 
 /**
- * Class responsible for handling the Graphical User Interface of the game.
+ * Class responsible for handling the {@code JFrame} displaying the board of the
+ * game as well as the pawn. This class also handles the interactions with the
+ * pawns.
  */
 public class GamePanel extends JPanel {
 
@@ -91,10 +93,9 @@ public class GamePanel extends JPanel {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 Pawn p = allPawns[i].pawns[j];
-                /**
-                 * If the pawn is not carried by a double pawn, that is, the pawn is not
-                 * contained in the {@code isDoubled} field of another pawn, we display it
-                 */
+
+                // If the pawn is not carried by a double pawn, that is, the pawn is not
+                // contained in the {@code isDoubled} field of another pawn, we display it
                 if (p.getLocation() != -10) {
                     getOnMap(p);
                     g.drawImage(p.img, p.gLoc.x, p.gLoc.y, pSize, pSize, this);
@@ -122,22 +123,22 @@ public class GamePanel extends JPanel {
      */
     private void getOnMap(Pawn pawn) {
 
-        /** The pawn is on its final line */
+        // The pawn is on its final line
         if (pawn.getEndLocation() != -1 && pawn.getEndLocation() != 6) {
-            switch (pawn.getColor().toInt()) {
-            case 0:// BLUE
+            switch (pawn.getColor()) {
+            case BLUE:
                 pawn.gLoc.x = this.cellW * 7;
                 pawn.gLoc.y = this.cellH * (13 - pawn.getEndLocation());
                 break;
-            case 1:// RED
+            case RED:
                 pawn.gLoc.x = this.cellW * (1 + pawn.getEndLocation());
                 pawn.gLoc.y = this.cellH * 7;
                 break;
-            case 2:// GREEN
+            case GREEN:
                 pawn.gLoc.x = this.cellW * 7;
                 pawn.gLoc.y = this.cellH * (1 + pawn.getEndLocation());
                 break;
-            case 3:// YELLOW
+            case YELLOW:
                 pawn.gLoc.x = this.cellW * (13 - pawn.getEndLocation());
                 pawn.gLoc.y = this.cellH * 7;
                 break;
@@ -150,20 +151,20 @@ public class GamePanel extends JPanel {
 
         } /** The pawn has finished */
         else if (pawn.getEndLocation() == 6) {
-            switch (pawn.getColor().toInt()) {
-            case 0:// BLUE
+            switch (pawn.getColor()) {
+            case BLUE:
                 pawn.gLoc.x = this.cellW * 7;
                 pawn.gLoc.y = this.cellH * 8;
                 break;
-            case 1:// RED
+            case RED:
                 pawn.gLoc.x = this.cellW * 6;
                 pawn.gLoc.y = this.cellH * 7;
                 break;
-            case 2:// GREEN
+            case GREEN:
                 pawn.gLoc.x = this.cellW * 7;
                 pawn.gLoc.y = this.cellH * 6;
                 break;
-            case 3:// YELLOW
+            case YELLOW:
                 pawn.gLoc.x = this.cellW * 8;
                 pawn.gLoc.y = this.cellH * 7;
                 break;
@@ -176,20 +177,20 @@ public class GamePanel extends JPanel {
         else if (pawn.getLocation() == -1) {
             int x = 0, y = 0;
 
-            switch (pawn.getColor().toInt()) {
-            case 0:// BLUE
+            switch (pawn.getColor()) {
+            case BLUE:
                 x = (int) (cellW * 1.5);
                 y = (int) (cellH * 10.5);
                 break;
-            case 1:// RED
+            case RED:
                 x = (int) (cellW * 1.5);
                 y = (int) (cellH * 1.5);
                 break;
-            case 2:// GREEN
+            case GREEN:
                 x = (int) (cellW * 10.5);
                 y = (int) (cellH * 1.5);
                 break;
-            case 3:// YELLOW
+            case YELLOW:
                 x = (int) (cellW * 10.5);
                 y = (int) (cellH * 10.5);
                 break;

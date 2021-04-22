@@ -13,28 +13,29 @@ public class Die {
 	}
 
 	/**
-	 * Roll the die for a player turn with the ludo game rules
+	 * Rolls the die for a given player turn according to the ludo game rules and
+	 * calls the {@code showRoll()} and {@code showPass()} to display the die value
+	 * or that the turn passes.
 	 * 
 	 * @return the value of the die
 	 */
 	public int rollDie() {
 		Random random = new Random();
-		int compteur = 0;
+		int counter = 0;
 
 		do {
-
-			compteur++;
+			counter++;
 			int newRollValue = random.nextInt(6) + 1;
 			this.value += newRollValue;
-			Board.infoPanel.showRoll(newRollValue, (this.value % 6 == 0 && compteur < 3));
+			Board.infoPanel.showRoll(newRollValue, (this.value % 6 == 0 && counter < 3), this.value);
 			System.out.println(value);
-		} while (this.value % 6 == 0 && compteur < 3);
+		} while (this.value % 6 == 0 && counter < 3);
 
-		// reroll the die up to 3 times, if 3 times 6 the turn passes
+		// Re-rolls the die up to 3 times, if we get a 6 three times in a row the turn
+		// passes
 
 		if (this.value == 18) {
 			this.value = 0;
-			// TODO : check is correct position for function call
 			Board.infoPanel.showPass();
 		}
 

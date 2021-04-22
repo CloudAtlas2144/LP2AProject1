@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.io.*;
 import javax.imageio.*;
-//import javax.swing.*;
 import java.util.Random;
 
 public class Pawns {
@@ -66,17 +65,17 @@ public class Pawns {
     private void loadPawnImage() {
         String imgName = "";
 
-        switch (this.color.toInt()) {
-        case 0:// BLUE
+        switch (this.color) {
+        case BLUE:
             imgName = "img/BluePawn.png";
             break;
-        case 1:// RED
+        case RED:
             imgName = "img/RedPawn.png";
             break;
-        case 2:// GREEN
+        case GREEN:
             imgName = "img/GreenPawn.png";
             break;
-        case 3:// YELLOW
+        case YELLOW:
             imgName = "img/YellowPawn.png";
             break;
         default:
