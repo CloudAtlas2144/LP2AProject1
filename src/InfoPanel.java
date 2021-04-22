@@ -117,8 +117,35 @@ public class InfoPanel {
         frame.setSize(300, 300);
         frame.setTitle("Turn manager");
         frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        // We make sure that both windows have the same behavior if one is minimized or
+        // closed
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+                Board.gamePanel.getFrame().setState(JFrame.ICONIFIED);
+                super.windowIconified(e);
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+                Board.gamePanel.getFrame().setState(JFrame.NORMAL);
+                super.windowDeiconified(e);
+            }
+
+        });
+
+        frame.setResizable(false);
         frame.setVisible(true);
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 
     /**
@@ -175,7 +202,7 @@ public class InfoPanel {
         pImg = Board.allPawns[color.toInt()].img;
         turnText = color.toCamelCase() + " player : it's your turn!";
         currentColor = color;
-        playerPanel.repaint();
+        // playerPanel.repaint();
         frame.setTitle(color.toCamelCase() + " Turn");
     }
 
@@ -199,7 +226,8 @@ public class InfoPanel {
         } else {
             this.dieTotalValue = 0;
         }
-        diePanel.repaint();
+        // FIXME
+        frame.repaint();
         if (reRoll) {
             try {
                 Thread.sleep(waitTime);
@@ -216,7 +244,8 @@ public class InfoPanel {
     public void showPass() {
         pawnSelect = false;
         pass = true;
-        playerPanel.repaint();
+        // FIXME
+        frame.repaint();
         try {
             Thread.sleep(waitTime);
         } catch (InterruptedException exception) {
@@ -235,7 +264,7 @@ public class InfoPanel {
                 dieImg[i] = ImageIO.read(new File(fileName));
             }
         } catch (IOException exception) {
-            exception.printStackTrace();
+            Main.imageNotFound();
         }
     }
 }

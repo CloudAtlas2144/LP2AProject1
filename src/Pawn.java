@@ -32,7 +32,6 @@ public class Pawn implements Cloneable {
 
         } catch (CloneNotSupportedException e) {
             throw new InternalError();
-            // TODO: handle exception
         }
     }
 

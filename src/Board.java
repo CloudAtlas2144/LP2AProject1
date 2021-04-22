@@ -1,22 +1,30 @@
 import java.util.ArrayList;
 
+/**
+ * Class responsible for managing the general evolution of the game as well as
+ * creating the game windows.
+ */
 public class Board {
 
-    public static ArrayList<Pawn> mainArray;
+    /** Array containing the pawns located on the baord. */
+    private static ArrayList<Pawn> mainArray;
 
-    public static Pawns pBlue; // à voir pour plus propre
-    public static Pawns pRed;
-    public static Pawns pGreen;
-    public static Pawns pYellow;
+    /** Arrays containing all the pawns of the game. */
+    public static Pawns pBlue, pRed, pGreen, pYellow;
 
-    /** Groups all the {@code Pawns} in one variable */
+    /** Groups all the {@code Pawns} in one array. */
     public static Pawns[] allPawns;
 
-    /** Reference to the current instance of {@code GamePanel}. */
+    /** Reference to the instance of {@code GamePanel}. */
     public static GamePanel gamePanel;
 
+    /** Reference to the instance of {@code InfoPanel}. */
     public static InfoPanel infoPanel;
 
+    /**
+     * Initializes the different arrays containing the pawns and instantiates a
+     * {@code GamePanel} and an {@code InfoPanel}.
+     */
     Board() {
         mainArray = new ArrayList<Pawn>();
 
@@ -31,7 +39,6 @@ public class Board {
         allPawns[2] = pGreen;
         allPawns[3] = pYellow;
 
-        createDummyBoard();
         gamePanel = new GamePanel();
         infoPanel = new InfoPanel();
     }
@@ -41,31 +48,32 @@ public class Board {
     }
 
     /**
-     * Manage the turn of the player, check if he plays the good pawn
+     * Manages the turn of the player, checks if he plays the correct pawn
      * 
-     * @param l the player's array of pawn
-     * @return check if the player win the game at the end of the turn
+     * @param l the player's array of pawns
+     * @return checks if the player has won the game at the end of the turn
      */
     public static boolean playerTurn(Pawns l) {
         Die die = new Die();
         boolean test = false;
+        infoPanel.showTurn(l.getColor());
         die.rollDie();
         System.out.println("tour du joueur " + l.getColor());
-        infoPanel.showTurn(l.getColor());
-        // FIXME : TEMPORARY WORKAROUND
-        Pawn selectedPawn = new Pawn(Color.RED);
+        Pawn selectedPawn = null;
 
-        if (die.getDie() != 0) {
+        // If the player did not roll a 6 three times in a row he can play
+        if (die.getDieValue() != 0) {
 
-            if (isPossibleMove(l, die.getDie())) {
+            if (isMovePossible(l, die.getDieValue())) {
 
-                if (l.allStock()) { // all the pawn are in the storage
+                // If all the pawns are in the player's storage zone
+                if (l.allStock()) {
 
-                    if (die.getDie() >= 6) { // the player roll a six, he can pull one pawn out
-
+                    // If the player rolled a six, he can pull one pawn out
+                    if (die.getDieValue() >= 6) {
                         selectedPawn = gamePanel.getSelectedPawn(l.getColor());
                         selectedPawn.setLocation(13 * selectedPawn.getColor().toInt());
-                        movePawn(selectedPawn, die.getDie() - 6);
+                        movePawn(selectedPawn, die.getDieValue() - 6);
                         gamePanel.unstorePawn(selectedPawn);
                         mainArray.add(selectedPawn);
                         test = true;
@@ -82,20 +90,20 @@ public class Board {
 
                             if (selectedPawn.getEndLocation() == -1) { // the pawn is on the common way
 
-                                test = movePawn(selectedPawn, die.getDie());
+                                test = movePawn(selectedPawn, die.getDieValue());
 
                             } else { // the pawn is on the color way
 
-                                test = selectedPawn.moveEndLocation(die.getDie());
+                                test = selectedPawn.moveEndLocation(die.getDieValue());
 
                             }
 
                         } else { // the pawn is in the storage
 
-                            if (die.getDie() >= 6) {
+                            if (die.getDieValue() >= 6) {
 
                                 selectedPawn.setLocation(13 * selectedPawn.getColor().toInt());
-                                movePawn(selectedPawn, die.getDie() - 6);
+                                movePawn(selectedPawn, die.getDieValue() - 6);
                                 gamePanel.unstorePawn(selectedPawn);
                                 mainArray.add(selectedPawn);
                                 test = true;
@@ -120,7 +128,7 @@ public class Board {
      * 
      * @param p   the pawn to check
      * @param die the die's value
-     * @return true if their was no problem, false if the movement can't occure
+     * @return true if their was no problem, false if the movement can't occur
      */
     public static boolean movePawn(Pawn p, int die) {
 
@@ -208,31 +216,29 @@ public class Board {
     }
 
     /**
-     * Check if the pawn will land on a free case or not
+     * Checks if the pawn will land on a free square or not
      * 
      * @param p   the moving pawn
      * @param die the die's value
-     * @return null if the case is free or the pawn on the occupied case
+     * @return {@code null} if the square is free or the {@code Pawn} on the
+     *         occupied square
      */
     public static Pawn isFree(Pawn p, int die) {
 
-        Pawn free = new Pawn(Color.BLUE);
-        free = null;
+        // The pawn already in our destination square
+        Pawn landingPawn = null;
         int i = 0;
 
-        while (i < mainArray.size() && free == null) {
+        // For each pawn in mainArray, we check if it is located in our destination
+        // square
+        while (i < mainArray.size() && landingPawn == null) {
 
             if (p.getLocation() + die == mainArray.get(i).getLocation()) {
-
-                free = mainArray.get(i);
-
+                landingPawn = mainArray.get(i);
             }
-
             i++;
-
         }
-
-        return free;
+        return landingPawn;
     }
 
     /**
@@ -343,42 +349,41 @@ public class Board {
     }
 
     /**
-     * Check if at least one pawn can move
+     * Checks if at least one of the player's pawns can be moved.
      *
-     * @param l   the list of pawn to test
+     * @param l   the list of pawns to test
      * @param die the value of the die
-     * @return true if one pawn can move, false if all the pawn are stucked
+     * @return {@code true} if one pawn can move, {@code false} if all the pawns are
+     *         stuck
      */
-    public static boolean isPossibleMove(Pawns l, int die) {
-
-        int test = 0; // count how many pawn can't move
+    public static boolean isMovePossible(Pawns l, int die) {
+        // Counts how many pawns he cannot move
+        int blockedPawns = 0;
         int i = 0;
         boolean result = true;
-        Pawn pawnTest = new Pawn(Color.BLUE);
+        Pawn testPawn = null;
 
-        while (i < 4 && test == i) {
+        while (i < 4 && blockedPawns == i) {
 
-            pawnTest = (Pawn) l.pawns[i].clone();
+            // we clone the pawn to do our testings without affecting the real pawn
+            testPawn = (Pawn) l.pawns[i].clone();
 
-            if (pawnTest.isOut()) {
-
-                if (!testMove(pawnTest, die)) {
-                    test++;
+            if (testPawn.isOut()) {
+                if (!testMove(testPawn, die)) {
+                    blockedPawns++;
                 }
             } else { // the pawn is in the storage
                 if (die >= 6) { // the pawn could go out of the storage
 
-                    pawnTest.setLocation(13 * pawnTest.getColor().toInt());
+                    testPawn.setLocation(13 * testPawn.getColor().toInt());
 
-                    if (!testMove(pawnTest, die - 6)) { // check if the pawn can go out of the
-                        // storage
+                    // checks if the pawn can be moved out of storage
+                    if (!testMove(testPawn, die - 6)) {
 
-                        test++;
-
+                        blockedPawns++;
                     }
                 } else {
-
-                    test++;
+                    blockedPawns++;
                 }
 
             }
@@ -387,7 +392,7 @@ public class Board {
 
         }
 
-        if (test == 4) {
+        if (blockedPawns == 4) {
             result = false;
             infoPanel.showPass();
         }
@@ -395,28 +400,37 @@ public class Board {
         return result;
     }
 
+    /**
+     * 
+     * @param p
+     * @param die
+     * @return
+     */
     public static boolean testMove(Pawn p, int die) {
 
-        Pawn place;
+        // Pawn located in the destination square of p
+        Pawn landingPawn;
         boolean movement = false;
 
-        if (p.isDoubled() != null) { // the pawn is doubled
+        // If the pawn is doubled
+        if (p.isDoubled() != null) {
 
-            if (die % 2 == 0) { // the value of the die is even
-
+            // If the value of the die is even
+            if (die % 2 == 0) {
                 die = die / 2;
-                place = isFree(p, die);
+                landingPawn = isFree(p, die);
 
-                if (place == null) { // the case is free
+                // the destination square is free
+                if (landingPawn == null) {
 
                     movement = true;
 
-                } else { // the case is already occupied
+                } else { // the square is already occupied
 
-                    if (!(place.getLocation() % 13 == 0 || place.getLocation() % 13 == 8)) { // the pawn don't land on a
-                                                                                             // safe case
+                    // the pawn is not located on an entry or on a safe square
+                    if (!(landingPawn.getLocation() % 13 == 0 || landingPawn.getLocation() % 13 == 8)) {
 
-                        if (place.getColor() != p.getColor()) { // the pawns have a different color
+                        if (landingPawn.getColor() != p.getColor()) { // the pawns are not of the same color
 
                             movement = true;
                         }
@@ -429,20 +443,20 @@ public class Board {
 
                 if (!cantPass(p, die)) {
 
-                    place = isFree(p, die);
+                    landingPawn = isFree(p, die);
 
-                    if (place == null) { // the case is free
+                    if (landingPawn == null) { // the square is free
 
                         movement = true;
 
-                    } else { // the case is already occupied
+                    } else { // the square is already occupied
 
-                        if (!(place.getLocation() % 13 == 0 || place.getLocation() % 13 == 8)) {
-                            // the pawn don't land on a safe case
+                        if (!(landingPawn.getLocation() % 13 == 0 || landingPawn.getLocation() % 13 == 8)) {
+                            // the pawn don't land on a safe square
 
-                            if (p.getColor() == place.getColor()) { // both have the same color
+                            if (p.getColor() == landingPawn.getColor()) { // both have the same color
 
-                                if (place.isDoubled() == null) { // place is not a doubled
+                                if (landingPawn.isDoubled() == null) { // place is not a doubled
 
                                     movement = true;
 
@@ -450,17 +464,17 @@ public class Board {
 
                             } else { // the pawns have a different color
 
-                                if (place.isDoubled() == null) { // place is not a doubled
+                                if (landingPawn.isDoubled() == null) { // place is not a doubled
 
                                     movement = true;
 
                                 }
                             }
-                        } else { // the pawns are on a safe case
+                        } else { // the pawns are on a safe square
 
-                            if (place.getColor() == p.getColor()) { // both have the same color
+                            if (landingPawn.getColor() == p.getColor()) { // both have the same color
 
-                                if (place.isDoubled() == null) {
+                                if (landingPawn.isDoubled() == null) {
 
                                     movement = true;
 
@@ -473,10 +487,5 @@ public class Board {
         }
 
         return movement;
-    }
-
-    // FIXME : TEMPORARY WORKAROUND
-    private static void createDummyBoard() {
-        return;
     }
 }

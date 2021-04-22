@@ -6,8 +6,8 @@ import java.awt.event.*;
 
 /**
  * Class responsible for handling the {@code JFrame} displaying the board of the
- * game as well as the pawn. This class also handles the interactions with the
- * pawns.
+ * game as well as the pawns. This class also handles the mouse interactions
+ * with the pawns.
  */
 public class GamePanel extends JPanel {
 
@@ -62,9 +62,30 @@ public class GamePanel extends JPanel {
         frame.add(this);
         frame.pack();
         frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+
+        // We make sure that both windows have the same behavior if one is minimized or
+        // closed
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+                Board.infoPanel.getFrame().setState(JFrame.ICONIFIED);
+                super.windowIconified(e);
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+                Board.infoPanel.getFrame().setState(JFrame.NORMAL);
+                super.windowDeiconified(e);
+            }
+        });
+
         frame.setResizable(false);
+        frame.setVisible(true);
     }
 
     public JFrame getFrame() {
@@ -85,7 +106,8 @@ public class GamePanel extends JPanel {
         try {
             ludo = ImageIO.read(new File("img/ludo_2.png"));
         } catch (IOException exception) {
-            exception.printStackTrace();
+            frame.dispose();
+            Main.imageNotFound();
         }
 
         g.drawImage(ludo, 0, 0, this.getWidth(), this.getHeight(), this);
@@ -149,7 +171,7 @@ public class GamePanel extends JPanel {
 
             pawn.target = new Rectangle(pawn.gLoc.x, pawn.gLoc.y, cellW, cellW);
 
-        } /** The pawn has finished */
+        } // The pawn has finished
         else if (pawn.getEndLocation() == 6) {
             switch (pawn.getColor()) {
             case BLUE:
@@ -173,7 +195,7 @@ public class GamePanel extends JPanel {
                 break;
             }
             pawn.target = new Rectangle(-10, -10, 1, 1);
-        } /** The pawn is in its base */
+        } // The pawn is in its base
         else if (pawn.getLocation() == -1) {
             int x = 0, y = 0;
 
@@ -222,7 +244,7 @@ public class GamePanel extends JPanel {
             // We create a target on the pawn
             pawn.target = new Rectangle(x, y, cellW, cellW);
 
-        } /** The pawn is on the board but not on its final line */
+        } // The pawn is on the board but not on its final line
         else if (pawn.getLocation() != -1) {
             int x = 0;
             int y = 0;

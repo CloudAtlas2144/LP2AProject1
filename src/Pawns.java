@@ -63,30 +63,11 @@ public class Pawns {
      * {@code img} variable.
      */
     private void loadPawnImage() {
-        String imgName = "";
-
-        switch (this.color) {
-        case BLUE:
-            imgName = "img/BluePawn.png";
-            break;
-        case RED:
-            imgName = "img/RedPawn.png";
-            break;
-        case GREEN:
-            imgName = "img/GreenPawn.png";
-            break;
-        case YELLOW:
-            imgName = "img/YellowPawn.png";
-            break;
-        default:
-            System.out.println("Exception : Pawn.loadPawnImage() : Unexpected color value.");
-            break;
-        }
-
+        String imgName = "img/" + this.color.toCamelCase() + "Pawn.png";
         try {
             this.img = ImageIO.read(new File(imgName));
         } catch (Exception exception) {
-            exception.printStackTrace();
+            Main.imageNotFound();
         }
     }
 
