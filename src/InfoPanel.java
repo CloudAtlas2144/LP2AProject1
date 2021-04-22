@@ -58,7 +58,7 @@ public class InfoPanel {
         frame.setLayout(new BorderLayout());
         loadDieImages();
 
-        /** Panel holding the {@code playerPanel} and the {@code diePanel}. */
+        // Panel holding the playerPanel and the diePanel.
         JPanel basePanel = new JPanel();
         basePanel.setLayout(new GridLayout(2, 0));
 
@@ -102,6 +102,7 @@ public class InfoPanel {
              * If the button is clicked we set the value of {@code waitTime} to 0, this has
              * as an effect to skip all animations where no user reaction is required.
              */
+            @Override
             public void mouseReleased(MouseEvent mouseEvent) {
                 waitTime = 0;
                 autoButton.setEnabled(false);
@@ -137,7 +138,6 @@ public class InfoPanel {
                 Board.gamePanel.getFrame().setState(JFrame.NORMAL);
                 super.windowDeiconified(e);
             }
-
         });
 
         frame.setResizable(false);
@@ -204,6 +204,7 @@ public class InfoPanel {
         currentColor = color;
         // playerPanel.repaint();
         frame.setTitle(color.toCamelCase() + " Turn");
+        pawnSelect = false;
     }
 
     /**
