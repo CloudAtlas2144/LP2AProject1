@@ -50,8 +50,9 @@ public class Pawns {
         boolean test = true;
 
         while (i < 4 && test == true) { // test if all pawns are in finish situation
-            if (this.pawns[i].getEndLocation() != 6) {
+            if (this.pawns[i].getEndLocation() != 5) {
                 test = false;
+                i++;
             }
         }
 

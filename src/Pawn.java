@@ -32,6 +32,7 @@ public class Pawn implements Cloneable {
 
         } catch (CloneNotSupportedException e) {
             throw new InternalError();
+            // TODO: handle exception
         }
     }
 
@@ -105,9 +106,10 @@ public class Pawn implements Cloneable {
      */
     public void move(int die) {
 
-        if (this.getLocation() + die > (50 + this.getColor().toInt() * 13) % 52 && this.hasEaten()) {
+        if (this.getLocation() + die > (50 + this.getColor().toInt() * 13) % 52 && this.hasEaten()
+                && this.getLocation() <= (50 + this.getColor().toInt() * 13) % 52) {
 
-            this.setEndLocation((this.getLocation() + die % 52));
+            this.setEndLocation(this.getLocation() + (die) - (50 + this.getColor().toInt() * 13) % 52 - 1);
             Board.getMainArray().remove(this);
 
         } else {
@@ -126,11 +128,27 @@ public class Pawn implements Cloneable {
      */
     public boolean moveEndLocation(int die) {
 
-        if ((this.getEndLocation() + die) % 6 == 0) {
-            this.setEndLocation(6);
+        if (die > 6) {
+
+            die = 0;
+
+        }
+
+        if (this.isDoubled() != null && die % 2 == 0) {
+
+            die = die / 2;
+
+        }
+
+        if (this.endLocation + die < 6) {
+
+            this.endLocation += die;
             return true;
+
         } else {
+
             return false;
+
         }
     }
 

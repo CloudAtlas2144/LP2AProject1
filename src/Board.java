@@ -231,7 +231,7 @@ public class Board {
         // square
         while (i < mainArray.size() && landingPawn == null) {
 
-            if (p.getLocation() + die == mainArray.get(i).getLocation()) {
+            if ((p.getLocation() + die) % 52 == mainArray.get(i).getLocation()) {
                 landingPawn = mainArray.get(i);
             }
             i++;
@@ -269,8 +269,8 @@ public class Board {
 
         if (p1.isDoubled() != null) { // p1 is a doubled
 
-            mainArray.remove(p1);
             p1.isDoubled().remove();
+            mainArray.remove(p1);
             p1.remove();
 
         } else { // p1 is simple
@@ -293,12 +293,20 @@ public class Board {
         boolean test = false;
         for (int i = 0; i < mainArray.size(); i++) {
 
-            if (p.getLocation() < mainArray.get(i).getLocation() // location before the turn
-                    && mainArray.get(i).getLocation() < (p.getLocation() + die) // location if the turn is complete
-                    && mainArray.get(i).isDoubled() != null && p.isDoubled() == null) {
+            if (p.getEndLocation() != -1 && (p.getEndLocation() + die > 6 || p.getEndLocation() == 5)) {
 
                 test = true;
 
+            } else {
+
+                if (p.getLocation() < mainArray.get(i).getLocation() // location before the turn
+                        && mainArray.get(i).getLocation() < (p.getLocation() + die) // location if the turn is complete
+                        && mainArray.get(i).isDoubled() != null && p.isDoubled() == null
+                        && p.getLocation() < mainArray.get(i).getLocation()) {
+
+                    test = true;
+
+                }
             }
         }
 
@@ -367,8 +375,20 @@ public class Board {
             testPawn = (Pawn) l.pawns[i].clone();
 
             if (testPawn.isOut()) {
-                if (!testMove(testPawn, die)) {
-                    blockedPawns++;
+
+                if (testPawn.getEndLocation() == -1) { // the pawn is on the common way
+
+                    if (!testMove(testPawn, die)) {
+                        blockedPawns++;
+                    }
+
+                } else { // the pawn is on the color way
+
+                    if (!testPawn.moveEndLocation(die)) {
+
+                        blockedPawns++;
+                    }
+
                 }
             } else { // the pawn is in the storage
                 if (die >= 6) { // the pawn could go out of the storage
