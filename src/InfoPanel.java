@@ -18,8 +18,6 @@ public class InfoPanel {
 
     /** {@code JPanel} displaying information about the player turn. */
     private JPanel playerPanel;
-    /** {@code Color} of the current turn. */
-    private Color currentColor;
     /** {@code Image} variable containing the icon of the current turn color. */
     private Image pImg = Board.allPawns[0].img;
     /** {@code String} holding information for the player. */
@@ -36,6 +34,7 @@ public class InfoPanel {
     private JButton autoButton;
     String[] buttonText = { "I don't have time!", "Wait, I can't see!" };
     boolean switchButton = true;
+    boolean isDisclaimed = false;
 
     /** {@code JPanel} displaying information about the die. */
     private JPanel diePanel;
@@ -91,7 +90,6 @@ public class InfoPanel {
                 }
                 if (reRoll) {
                     g.drawString("Re-rolling...", 100, 45 + offset);
-
                 }
             }
         };
@@ -108,6 +106,7 @@ public class InfoPanel {
             public void mouseReleased(MouseEvent mouseEvent) {
                 if (switchButton) {
                     waitTime = 0;
+                    turnDelayDisableWarning();
                     autoButton.setText(buttonText[1]);
                     switchButton = false;
                 } else {
@@ -175,7 +174,8 @@ public class InfoPanel {
         try {
             Thread.sleep(1200);
         } catch (InterruptedException exception) {
-            exception.printStackTrace();
+            frame.dispose();
+            Main.unexpectedError();
         }
     }
 
@@ -195,7 +195,8 @@ public class InfoPanel {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException exception) {
-            exception.printStackTrace();
+            frame.dispose();
+            Main.unexpectedError();
         }
         frame.setLocation(Board.gamePanel.getFrame().getWidth() + Board.gamePanel.getFrame().getLocation().x,
                 Board.gamePanel.getFrame().getLocation().y);
@@ -210,10 +211,11 @@ public class InfoPanel {
     public void showTurn(Color color) {
         pImg = Board.allPawns[color.toInt()].img;
         turnText = color.toCamelCase() + " player : it's your turn!";
-        currentColor = color;
-        // playerPanel.repaint();
         frame.setTitle(color.toCamelCase() + " Turn");
+
         pawnSelect = false;
+        reRoll = false;
+        pass = false;
     }
 
     /**
@@ -227,24 +229,37 @@ public class InfoPanel {
      * @param dieTotalValue total value of the die
      */
     public void showRoll(int dieValue, boolean reRoll, int dieTotalValue) {
-        pawnSelect = !reRoll;
         this.dieValue = dieValue;
-        this.reRoll = reRoll;
         dieText = String.format("You rolled a %d!", dieValue);
+        // If the player has done a re-roll before we display the die total value
         if (dieTotalValue > dieValue) {
             this.dieTotalValue = dieTotalValue;
         } else {
             this.dieTotalValue = 0;
         }
-        // FIXME
-        frame.repaint();
+
+        this.reRoll = reRoll;
         if (reRoll) {
+            pawnSelect = false;
+            frame.repaint();
             try {
                 Thread.sleep(waitTime);
             } catch (InterruptedException exception) {
-                exception.printStackTrace();
+                frame.dispose();
+                Main.unexpectedError();
             }
         }
+    }
+
+    /**
+     * Show that the player has to select a pawn and refreshes the screen without
+     * stopping the running {@code Thread}.
+     */
+    public void showPawnSelect() {
+        pawnSelect = true;
+        pass = false;
+        reRoll = false;
+        frame.repaint();
     }
 
     /**
@@ -254,14 +269,14 @@ public class InfoPanel {
     public void showPass() {
         pawnSelect = false;
         pass = true;
-        // FIXME
+        reRoll = false;
         frame.repaint();
         try {
             Thread.sleep(waitTime);
         } catch (InterruptedException exception) {
-            exception.printStackTrace();
+            frame.dispose();
+            Main.unexpectedError();
         }
-        showTurn(currentColor.next());
     }
 
     /**
@@ -275,6 +290,19 @@ public class InfoPanel {
             }
         } catch (IOException exception) {
             Main.imageNotFound();
+        }
+    }
+
+    /**
+     * Explains the action of the JButton.
+     */
+    private void turnDelayDisableWarning() {
+        if (!isDisclaimed) {
+            JOptionPane.showMessageDialog(frame,
+                    "All right, we will only stop when\na player has to select a pawn then.", "",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    new ImageIcon(dieImg[0].getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
+            isDisclaimed = true;
         }
     }
 }

@@ -7,7 +7,7 @@ import java.awt.event.*;
 /**
  * Class responsible for handling the {@code JFrame} displaying the board of the
  * game as well as the pawns. This class also handles the mouse interactions
- * with the pawns.
+ * with the pawns. Extends {@code JPanel}.
  */
 public class GamePanel extends JPanel {
 
@@ -16,7 +16,7 @@ public class GamePanel extends JPanel {
     /** {@code Point} containing the position of the user's mouse. */
     private Point mouse = new Point(0, 0);
     /** Width and height of the {@code GamePanel}. */
-    final int GP_WIDTH = 600, GP_HEIGHT = 600;
+    private final int GP_WIDTH = 600, GP_HEIGHT = 600;
     /** Width of a cell in the window. */
     private int cellW = (int) GP_WIDTH / 15;
     /** Height of a cell in the window. */
@@ -40,7 +40,7 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             /**
              * Executes the contained code each time the panel is clicked. If the user
-             * clicked on a {@code Pawn} we assigne the {@code Pawn} that was clicked to the
+             * clicked on a {@code Pawn} we assign the {@code Pawn} that was clicked to the
              * {@code selectedPawn} variable.
              */
             public void mouseReleased(MouseEvent mouseEvent) {
@@ -104,7 +104,7 @@ public class GamePanel extends JPanel {
 
         Image ludo = null;
         try {
-            ludo = ImageIO.read(new File("img/ludo_2.png"));
+            ludo = ImageIO.read(new File("img/ludo_board.png"));
         } catch (IOException exception) {
             frame.dispose();
             Main.imageNotFound();
@@ -117,7 +117,7 @@ public class GamePanel extends JPanel {
                 Pawn p = allPawns[i].pawns[j];
 
                 // If the pawn is not carried by a double pawn, that is, the pawn is not
-                // contained in the {@code isDoubled} field of another pawn, we display it
+                // contained in the isDoubled field of another pawn, we display it
                 if (p.getLocation() != -10) {
                     getOnMap(p);
                     g.drawImage(p.img, p.gLoc.x, p.gLoc.y, pSize, pSize, this);
@@ -136,10 +136,8 @@ public class GamePanel extends JPanel {
 
     /**
      * Determines the x and y coordinates on the {@code JPanel} of a pawn belonging
-     * to {@code allPawns} and defines the position of its target. If the pawn has
+     * to {@code allPawns[]} and defines the position of its target. If the pawn has
      * finished, its target is made unreachable
-     * 
-     * @see Board
      * 
      * @param pawn the pawn to locate
      */
@@ -216,9 +214,6 @@ public class GamePanel extends JPanel {
                 x = (int) (cellW * 10.5);
                 y = (int) (cellH * 10.5);
                 break;
-            default:
-                System.out.println("Exception : GamePanel.getOnMap() : Unexpected color value.");
-                break;
             }
 
             int index = storePawn(pawn);
@@ -287,9 +282,8 @@ public class GamePanel extends JPanel {
             } else if (location < 52) {
                 x = this.cellW * (57 - location);
                 y = this.cellH * 14;
-            } else {
-                JOptionPane.showMessageDialog(null, "Unhandled Location", "Warning", JOptionPane.WARNING_MESSAGE);
             }
+
             // We set the graphical location of the pawn
             pawn.gLoc.x = x;
             pawn.gLoc.y = y;
@@ -314,7 +308,8 @@ public class GamePanel extends JPanel {
             try {
                 wait();
             } catch (InterruptedException exception) {
-                exception.printStackTrace();
+                frame.dispose();
+                Main.unexpectedError();
             }
         } else {
             notifyAll();
