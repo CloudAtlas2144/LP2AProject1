@@ -34,6 +34,8 @@ public class InfoPanel {
 
     /** {@code JButton} allowing the user to speed up the game notifications. */
     private JButton autoButton;
+    String[] buttonText = { "I don't have time!", "Wait, I can't see!" };
+    boolean switchButton = true;
 
     /** {@code JPanel} displaying information about the die. */
     private JPanel diePanel;
@@ -94,7 +96,7 @@ public class InfoPanel {
             }
         };
 
-        autoButton = new JButton("I don't have time!");
+        autoButton = new JButton(buttonText[0]);
         autoButton.setFocusable(false);
 
         autoButton.addMouseListener(new MouseAdapter() {
@@ -104,8 +106,15 @@ public class InfoPanel {
              */
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
-                waitTime = 0;
-                autoButton.setEnabled(false);
+                if (switchButton) {
+                    waitTime = 0;
+                    autoButton.setText(buttonText[1]);
+                    switchButton = false;
+                } else {
+                    waitTime = 3000;
+                    autoButton.setText(buttonText[0]);
+                    switchButton = true;
+                }
             }
         });
 
