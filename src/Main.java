@@ -10,6 +10,8 @@ import javax.swing.JOptionPane;
  */
 public class Main {
     public static void main(String[] args) {
+
+        // We prompt a pop up message to ask the user to start the game
         ImageIcon die = null;
         try {
             die = new ImageIcon(ImageIO.read(new File("img/die_0.png")).getScaledInstance(70, 70, Image.SCALE_SMOOTH));
@@ -33,7 +35,6 @@ public class Main {
             Color colorTurn = Board.firstToStart();
 
             while (!isEnd) {
-                System.out.println("pause");
                 isEnd = Board.playerTurn(Board.allPawns[colorTurn.toInt()]);
                 colorTurn = colorTurn.next();
 

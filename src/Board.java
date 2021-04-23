@@ -56,7 +56,6 @@ public class Board {
     public static boolean playerTurn(Pawns l) {
         Die die = new Die();
         boolean canPlay = false;
-        System.out.println("tour du joueur " + l.getColor());
         infoPanel.showTurn(l.getColor());
         die.rollDie();
         Pawn selectedPawn = null;
@@ -286,13 +285,14 @@ public class Board {
     }
 
     /**
-     * Check if a pawn will pass a doubled pawn
+     * Checks if a pawn will pass a doubled pawn
      * 
-     * @param p   the pawn who will moved
+     * @param p   the pawn which will move
      * @param die the value of the movement
-     * @return false if the pawn is not blocked, true if a doubled block the pawn
+     * @return false if the pawn is not blocked, true if a doubled pawn blocks the
+     *         pawn
      */
-    public static boolean cantPass(Pawn p, int die) {// check if the pawn pass over a doubled
+    public static boolean cantPass(Pawn p, int die) {// checks if the pawn passes over a doubled
         boolean test = false;
         for (int i = 0; i < mainArray.size(); i++) {
 
@@ -319,42 +319,42 @@ public class Board {
     /**
      * the first roll of die to decide which player will start the game
      * 
-     * @return the color of the player who start
+     * @return the color of the player who starts
      */
     public static Color firstToStart() {
-        int pStarter;
-        Color pStarterColor;
+        int startingP;
+        Color startingColor;
 
         pRed.start();
         pBlue.start();
         pGreen.start();
         pYellow.start();
 
-        pStarter = pRed.starter;
-        pStarterColor = pRed.color;
+        startingP = pRed.starter;
+        startingColor = pRed.color;
 
-        if (pStarter < pBlue.starter) {
+        if (startingP < pBlue.starter) {
 
-            pStarterColor = pBlue.color;
-            pStarter = pBlue.starter;
+            startingColor = pBlue.color;
+            startingP = pBlue.starter;
         }
 
-        if (pStarter < pGreen.starter) {
+        if (startingP < pGreen.starter) {
 
-            pStarterColor = pGreen.color;
-            pStarter = pGreen.starter;
-
-        }
-
-        if (pStarter < pYellow.starter) {
-
-            pStarterColor = pYellow.color;
-            pStarter = pYellow.starter;
+            startingColor = pGreen.color;
+            startingP = pGreen.starter;
 
         }
 
-        infoPanel.showStartingPlayer(pStarterColor);
-        return pStarterColor;
+        if (startingP < pYellow.starter) {
+
+            startingColor = pYellow.color;
+            startingP = pYellow.starter;
+
+        }
+
+        infoPanel.showStartingPlayer(startingColor);
+        return startingColor;
     }
 
     /**
@@ -385,7 +385,7 @@ public class Board {
                         blockedPawns++;
                     }
 
-                } else { // the pawn is on the color way
+                } else { // the pawn is on the colored way
 
                     if (!testPawn.moveEndLocation(die)) {
 
@@ -421,10 +421,11 @@ public class Board {
     }
 
     /**
+     * Checks if the given pawn can move according to the die value.
      * 
-     * @param p
-     * @param die
-     * @return
+     * @param p   pawn to test
+     * @param die value of the die
+     * @return true if the pawn can move, false otherwise
      */
     public static boolean testMove(Pawn p, int die) {
 
@@ -472,11 +473,11 @@ public class Board {
                     } else { // the square is already occupied
 
                         if (!(landingPawn.getLocation() % 13 == 0 || landingPawn.getLocation() % 13 == 8)) {
-                            // the pawn don't land on a safe square
+                            // the pawn does not land on a safe square
 
                             if (p.getColor() == landingPawn.getColor()) { // both have the same color
 
-                                if (landingPawn.isDoubled() == null) { // place is not a doubled
+                                if (landingPawn.isDoubled() == null) { // the pawn on landing square is not a doubled
 
                                     movement = true;
 
@@ -484,7 +485,7 @@ public class Board {
 
                             } else { // the pawns have a different color
 
-                                if (landingPawn.isDoubled() == null) { // place is not a doubled
+                                if (landingPawn.isDoubled() == null) { // the pawn on landing square is not a doubled
 
                                     movement = true;
 

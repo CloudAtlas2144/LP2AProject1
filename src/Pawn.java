@@ -4,7 +4,16 @@ public class Pawn implements Cloneable {
     private Color color;
     private Pawn isDoubled;
     private boolean hasEaten;
+
+    /**
+     * Position of the pawn on the common path of the board. Is equal to -1 if the
+     * pawn is in its base, -10 if it is doubled and carried by another pawn.
+     */
     private int location;
+    /**
+     * Position of the pawn on its final line. Is equal to -1 when it is out of the
+     * final line.
+     */
     private int endLocation;
 
     /** Clickable target associated to the pawn. */
@@ -32,7 +41,6 @@ public class Pawn implements Cloneable {
 
         } catch (CloneNotSupportedException e) {
             throw new InternalError();
-            // TODO: handle exception
         }
     }
 
@@ -72,15 +80,8 @@ public class Pawn implements Cloneable {
         this.endLocation = endlocation;
     }
 
-    public void duplicate() { // à implémenter
-
-        this.isDoubled().setLocation(this.getLocation());
-        this.isDoubled().setHasEaten(this.hasEaten());
-        this.setDoubled(null);
-    }
-
     /**
-     * Check if the pawn is on the board
+     * Checks if the pawn is on the board
      * 
      * @return true if it is on the board, false if it is in the storage
      */
@@ -92,7 +93,7 @@ public class Pawn implements Cloneable {
         }
     }
 
-    /** remove a pawn from the board */
+    /** removes a pawn from the board */
     public void remove() {
         this.setDoubled(null);
         this.setHasEaten(false);
@@ -100,7 +101,7 @@ public class Pawn implements Cloneable {
     }
 
     /**
-     * move the pawn on the correct location
+     * Moves the pawn on the correct location.
      * 
      * @param die the value of the die
      */
@@ -149,14 +150,6 @@ public class Pawn implements Cloneable {
 
             return false;
 
-        }
-    }
-
-    public boolean isSafe() {
-        if (this.location == 8 % 13 || this.location == 0 % 13) {
-            return true;
-        } else {
-            return false;
         }
     }
 }

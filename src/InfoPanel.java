@@ -221,8 +221,8 @@ public class InfoPanel {
     /**
      * Shows the value of the die for a player turn, refreshes the lower part of the
      * {@code JFrame}, and waits for the number of seconds indicated in
-     * {@code waitTime}. If the player has launched several times, it will also
-     * display the total value of the die.
+     * {@code waitTime}. If the player has rolled the die several times, it will
+     * also display the total value of the die.
      * 
      * @param dieValue      value of the die
      * @param reRoll        indicates if the player has to reroll or not

@@ -3,6 +3,7 @@ import java.io.*;
 import javax.imageio.*;
 import java.util.Random;
 
+/** Class responsible for managing all pawns of a same color. */
 public class Pawns {
     public Pawn[] pawns;
     public Color color;
@@ -26,9 +27,9 @@ public class Pawns {
     }
 
     /**
-     * Check if all the pawn are located in the storage
+     * Checks if all the pawn are located in the storage
      * 
-     * @return true if all the pawn are in the storage, false if it is not the case
+     * @return true if all the pawns are in the storage, false if it is not the case
      */
     public boolean allStock() {
         boolean test = true;
@@ -41,7 +42,7 @@ public class Pawns {
     }
 
     /**
-     * Check if all of the 4 pawn have finished
+     * Checks if all of the 4 pawns have finished
      * 
      * @return true if they have finished, false if one or more have not finish
      */
@@ -49,7 +50,7 @@ public class Pawns {
         int i = 0;
         boolean test = true;
 
-        while (i < 4 && test == true) { // test if all pawns are in finish situation
+        while (i < 4 && test == true) { // tests if all pawns have finished
             if (this.pawns[i].getEndLocation() != 5) {
                 test = false;
                 i++;
@@ -80,7 +81,6 @@ public class Pawns {
         this.starter = random.nextInt(6) + 1;
 
         Board.infoPanel.showStartAttempt(color, this.starter);
-        System.out.println(this.starter);
     }
 
 }
