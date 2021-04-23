@@ -37,7 +37,7 @@ public class Die {
 			counter++;
 			int newRollValue = random.nextInt(6) + 1;
 			this.value += newRollValue;
-			Board.infoPanel.showRoll(newRollValue, (this.value % 6 == 0 && counter < 3), this.value);
+			Board.infoPanel.showRoll(newRollValue, (newRollValue == 6 && counter < 3), this.value);
 			System.out.println(value);
 		} while (this.value % 6 == 0 && counter < 3);
 

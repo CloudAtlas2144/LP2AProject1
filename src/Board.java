@@ -55,10 +55,10 @@ public class Board {
      */
     public static boolean playerTurn(Pawns l) {
         Die die = new Die();
-        boolean test = false;
+        boolean canPlay = false;
+        System.out.println("tour du joueur " + l.getColor());
         infoPanel.showTurn(l.getColor());
         die.rollDie();
-        System.out.println("tour du joueur " + l.getColor());
         Pawn selectedPawn = null;
 
         // If the player did not roll a 6 three times in a row he can play
@@ -66,17 +66,18 @@ public class Board {
 
             if (isMovePossible(l, die.getDieValue())) {
 
-                // If all the pawns are in the player's storage zone
+                // If all pawns are in the player's storage zone
                 if (l.allStock()) {
 
                     // If the player rolled a six, he can pull one pawn out
                     if (die.getDieValue() >= 6) {
+                        infoPanel.showPawnSelect();
                         selectedPawn = gamePanel.getSelectedPawn(l.getColor());
                         selectedPawn.setLocation(13 * selectedPawn.getColor().toInt());
                         movePawn(selectedPawn, die.getDieValue() - 6);
                         gamePanel.unstorePawn(selectedPawn);
                         mainArray.add(selectedPawn);
-                        test = true;
+                        canPlay = true;
 
                     } else {
                         infoPanel.showPass();
@@ -84,17 +85,18 @@ public class Board {
                 } else { // there is already one pawn or more on the board
                     do {
 
+                        infoPanel.showPawnSelect();
                         selectedPawn = gamePanel.getSelectedPawn(l.getColor());
 
                         if (selectedPawn.isOut()) { // the pawn is on the board
 
-                            if (selectedPawn.getEndLocation() == -1) { // the pawn is on the common way
+                            if (selectedPawn.getEndLocation() == -1) { // the pawn is on the common path
 
-                                test = movePawn(selectedPawn, die.getDieValue());
+                                canPlay = movePawn(selectedPawn, die.getDieValue());
 
-                            } else { // the pawn is on the color way
+                            } else { // the pawn is on the colored path
 
-                                test = selectedPawn.moveEndLocation(die.getDieValue());
+                                canPlay = selectedPawn.moveEndLocation(die.getDieValue());
 
                             }
 
@@ -106,14 +108,15 @@ public class Board {
                                 movePawn(selectedPawn, die.getDieValue() - 6);
                                 gamePanel.unstorePawn(selectedPawn);
                                 mainArray.add(selectedPawn);
-                                test = true;
+                                canPlay = true;
 
                             }
                         }
-
-                    } while (test == false);
+                    } while (canPlay == false);
 
                 }
+            } else {
+                infoPanel.showPass();
             }
 
         }
@@ -123,12 +126,12 @@ public class Board {
     }
 
     /**
-     * Check if the movement of the pawn is correct and manage the different
+     * Checks if the movement of the pawn is correct and manages the different
      * possibilities (eaten, doubled,...)
      * 
      * @param p   the pawn to check
      * @param die the die's value
-     * @return true if their was no problem, false if the movement can't occur
+     * @return true if their was no problem, false if the move can not happen
      */
     public static boolean movePawn(Pawn p, int die) {
 
@@ -141,7 +144,7 @@ public class Board {
                 die = die / 2;
                 place = isFree(p, die);
 
-                if (place == null) { // the case is free
+                if (place == null) { // the square is free
 
                     p.move(die);
                     movement = true;
@@ -392,7 +395,6 @@ public class Board {
 
         if (blockedPawns == 4) {
             result = false;
-            infoPanel.showPass();
         }
 
         return result;
