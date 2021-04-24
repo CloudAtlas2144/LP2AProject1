@@ -1,14 +1,6 @@
 TASKS :
     URGENT : 
-        - Determine why "Turn Passes..." during reroll [DONE]
-        - Add final Popup
     PENDING :
-        - Stop creating rectangles
-        - Correct English mistakes
-        - Remove error messages
-        - Look for static die
-        - Select a nice font for the InfoPanel
-        - Explain what I don't have time does
 
 
 Classes :
