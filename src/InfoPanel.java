@@ -199,6 +199,7 @@ public class InfoPanel {
             frame.dispose();
             Main.unexpectedError();
         }
+        // Moves the window to the right side of the game panel
         frame.setLocation(Board.getGamePanel().getFrame().getWidth() + Board.getGamePanel().getFrame().getLocation().x,
                 Board.getGamePanel().getFrame().getLocation().y);
         autoButton.setEnabled(true);
