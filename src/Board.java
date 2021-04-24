@@ -297,7 +297,7 @@ public class Board {
     }
 
     /**
-     * Checks if a pawn will pass a doubled pawn
+     * Checks if a pawn will pass a doubled pawn.
      * 
      * @param p   the pawn which will move
      * @param die the value of the movement
@@ -329,7 +329,7 @@ public class Board {
     }
 
     /**
-     * the first roll of die to decide which player will start the game
+     * The first roll of die to decide which player will start the game
      * 
      * @return the color of the player who starts
      */
