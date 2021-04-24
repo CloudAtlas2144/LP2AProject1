@@ -119,6 +119,7 @@ public abstract class Main {
         winFrame.pack();
         winFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         winFrame.setLocationRelativeTo(Board.getGamePanel());
+        winFrame.setResizable(true);
         winFrame.setVisible(true);
     }
 }
