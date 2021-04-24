@@ -12,10 +12,6 @@ public class Pawns {
     /** Image file of the pawn. */
     public Image img;
 
-    public Color getColor() {
-        return color;
-    }
-
     public Pawns(Color c) {
         this.color = c;
         this.pawns = new Pawn[4];
@@ -24,6 +20,10 @@ public class Pawns {
             pawns[i] = new Pawn(c);
             pawns[i].img = img;
         }
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     /**

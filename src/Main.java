@@ -6,9 +6,9 @@ import javax.swing.JOptionPane;
 
 /**
  * Class responsible for handling player turn distribution and I/O error
- * handling.
+ * handling. Cannot be instantiated.
  */
-public class Main {
+public abstract class Main {
     public static void main(String[] args) {
 
         // We prompt a pop up message to ask the user to start the game
