@@ -7,7 +7,7 @@ import java.util.Random;
 public class Pawns {
     public Pawn[] pawns;
     public Color color;
-    public int starter;
+    public int startRoll;
 
     /** Image file of the pawn. */
     public Image img;
@@ -18,7 +18,7 @@ public class Pawns {
         loadPawnImage();
         for (int i = 0; i < 4; i++) {
             pawns[i] = new Pawn(c);
-            pawns[i].img = img;
+            pawns[i].setImg(img);
         }
     }
 
@@ -78,9 +78,9 @@ public class Pawns {
      */
     public void start() {
         Random random = new Random();
-        this.starter = random.nextInt(6) + 1;
+        this.startRoll = random.nextInt(6) + 1;
 
-        Board.infoPanel.showStartAttempt(color, this.starter);
+        Board.getInfoPanel().showStartAttempt(color, this.startRoll);
     }
 
 }

@@ -17,11 +17,11 @@ public class Pawn implements Cloneable {
     private int endLocation;
 
     /** Clickable target associated to the pawn. */
-    public Rectangle target;
+    private Rectangle target;
     /** Image file of the pawn. */
-    public Image img;
-    /** Location of the pawn on the window. */
-    public Point gLoc;
+    private Image img;
+    /** Graphical location of the pawn on the window. */
+    private Point gLoc;
 
     Pawn(Color color) {
         this.color = color;
@@ -32,6 +32,29 @@ public class Pawn implements Cloneable {
 
         this.gLoc = new Point(0, 0);
         this.target = new Rectangle(-10, -10, 1, 1);
+    }
+
+    public Point getgLoc() {
+        return gLoc;
+    }
+
+    public void setImg(Image img) {
+        this.img = img;
+    }
+
+    public Image getImg() {
+        return img;
+    }
+
+    public void setTarget(int x, int y, int width, int height) {
+        this.target.x = x;
+        this.target.y = y;
+        this.target.width = width;
+        this.target.height = height;
+    }
+
+    public Rectangle getTarget() {
+        return target;
     }
 
     public Pawn clone() {

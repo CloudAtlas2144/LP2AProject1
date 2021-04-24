@@ -35,7 +35,7 @@ public abstract class Main {
             Color colorTurn = Board.firstToStart();
 
             while (!isEnd) {
-                isEnd = Board.playerTurn(Board.allPawns[colorTurn.toInt()]);
+                isEnd = Board.playerTurn(Board.getAllPawns()[colorTurn.toInt()]);
                 colorTurn = colorTurn.next();
 
                 if (isEnd) {
@@ -81,7 +81,7 @@ public abstract class Main {
      * @param color Color of the player
      */
     private static void showWinner(final Color color) {
-        Board.infoPanel.getFrame().dispose();
+        Board.getInfoPanel().getFrame().dispose();
         JFrame winFrame = new JFrame();
         JPanel winPanel = new JPanel() {
             @Override
@@ -118,7 +118,7 @@ public abstract class Main {
         winFrame.add(winPanel);
         winFrame.pack();
         winFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        winFrame.setLocationRelativeTo(Board.gamePanel);
+        winFrame.setLocationRelativeTo(Board.getGamePanel());
         winFrame.setVisible(true);
     }
 }

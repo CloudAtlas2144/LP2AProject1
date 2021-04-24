@@ -18,8 +18,9 @@ public class InfoPanel {
 
     /** {@code JPanel} displaying information about the player turn. */
     private JPanel playerPanel;
+    private Pawns[] allPawns = Board.getAllPawns();
     /** {@code Image} variable containing the icon of the current turn color. */
-    private Image pImg = Board.allPawns[0].img;
+    private Image pImg = allPawns[0].img;
     /** {@code String} holding information for the player. */
     private String turnText = "";
     /**
@@ -32,9 +33,9 @@ public class InfoPanel {
 
     /** {@code JButton} allowing the user to speed up the game notifications. */
     private JButton autoButton;
-    String[] buttonText = { "I don't have time!", "Wait, I can't see!" };
-    boolean switchButton = true;
-    boolean isDisclaimed = false;
+    private String[] buttonText = { "I don't have time!", "Wait, I can't see!" };
+    private boolean switchButton = true;
+    private boolean isDisclaimed = false;
 
     /** {@code JPanel} displaying information about the die. */
     private JPanel diePanel;
@@ -137,13 +138,13 @@ public class InfoPanel {
 
             @Override
             public void windowIconified(WindowEvent e) {
-                Board.gamePanel.getFrame().setState(JFrame.ICONIFIED);
+                Board.getGamePanel().getFrame().setState(JFrame.ICONIFIED);
                 super.windowIconified(e);
             }
 
             @Override
             public void windowDeiconified(WindowEvent e) {
-                Board.gamePanel.getFrame().setState(JFrame.NORMAL);
+                Board.getGamePanel().getFrame().setState(JFrame.NORMAL);
                 super.windowDeiconified(e);
             }
         });
@@ -165,7 +166,7 @@ public class InfoPanel {
      */
     public void showStartAttempt(Color color, int dieValue) {
         frame.setTitle("First Roll");
-        pImg = Board.allPawns[color.toInt()].img;
+        pImg = allPawns[color.toInt()].img;
         turnText = color.toCamelCase() + " player : roll to start!";
         this.dieValue = dieValue;
         dieText = String.format("You rolled a %d!", dieValue);
@@ -187,7 +188,7 @@ public class InfoPanel {
      */
     public void showStartingPlayer(Color color) {
         turnText = color.toCamelCase() + " player starts playing!";
-        pImg = Board.allPawns[color.toInt()].img;
+        pImg = allPawns[color.toInt()].img;
         dieValue = 0;
         dieText = "";
         frame.repaint();
@@ -198,8 +199,8 @@ public class InfoPanel {
             frame.dispose();
             Main.unexpectedError();
         }
-        frame.setLocation(Board.gamePanel.getFrame().getWidth() + Board.gamePanel.getFrame().getLocation().x,
-                Board.gamePanel.getFrame().getLocation().y);
+        frame.setLocation(Board.getGamePanel().getFrame().getWidth() + Board.getGamePanel().getFrame().getLocation().x,
+                Board.getGamePanel().getFrame().getLocation().y);
         autoButton.setEnabled(true);
     }
 
@@ -209,7 +210,7 @@ public class InfoPanel {
      * @param color {@code Color} of the player
      */
     public void showTurn(Color color) {
-        pImg = Board.allPawns[color.toInt()].img;
+        pImg = allPawns[color.toInt()].img;
         turnText = color.toCamelCase() + " player : it's your turn!";
         frame.setTitle(color.toCamelCase() + " Turn");
 

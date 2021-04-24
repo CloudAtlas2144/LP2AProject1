@@ -27,7 +27,7 @@ public class GamePanel extends JPanel {
     /** Contains a reference to the last pawn clicked by the user. */
     private Pawn selectedPawn = null;
     /** Groups all the {@code Pawns} in one variable */
-    private Pawns[] allPawns = Board.allPawns;
+    private Pawns[] allPawns = Board.getAllPawns();
     /** Contains the position of the stored pawns in their base. */
     private Pawn[][] storedPawns = new Pawn[4][4];
 
@@ -48,7 +48,7 @@ public class GamePanel extends JPanel {
 
                 for (int i = 0; i < 4; i++) {
                     for (int j = 0; j < 4; j++) {
-                        Rectangle target = allPawns[i].pawns[j].target;
+                        Rectangle target = allPawns[i].pawns[j].getTarget();
                         if (target.contains(mouse)) {
                             selectedPawn = allPawns[i].pawns[j];
                             waitForSelection(false);
@@ -73,13 +73,13 @@ public class GamePanel extends JPanel {
 
             @Override
             public void windowIconified(WindowEvent e) {
-                Board.infoPanel.getFrame().setState(JFrame.ICONIFIED);
+                Board.getInfoPanel().getFrame().setState(JFrame.ICONIFIED);
                 super.windowIconified(e);
             }
 
             @Override
             public void windowDeiconified(WindowEvent e) {
-                Board.infoPanel.getFrame().setState(JFrame.NORMAL);
+                Board.getInfoPanel().getFrame().setState(JFrame.NORMAL);
                 super.windowDeiconified(e);
             }
         });
@@ -120,15 +120,12 @@ public class GamePanel extends JPanel {
                 // contained in the isDoubled field of another pawn, we display it
                 if (p.getLocation() != -10) {
                     getOnMap(p);
-                    g.drawImage(p.img, p.gLoc.x, p.gLoc.y, pSize, pSize, this);
+                    g.drawImage(p.getImg(), p.getgLoc().x, p.getgLoc().y, pSize, pSize, this);
                     if (p.isDoubled() != null) {
-                        g.drawImage(p.img, p.gLoc.x + 4, p.gLoc.y + 4, pSize, pSize, this);
+                        g.drawImage(p.getImg(), p.getgLoc().x + 4, p.getgLoc().y + 4, pSize, pSize, this);
                     }
                 } else {
-                    p.target.width = 1;
-                    p.target.height = 1;
-                    p.target.x = -10;
-                    p.target.y = -10;
+                    p.setTarget(1, 1, -10, -10);
                 }
             }
         }
@@ -147,52 +144,52 @@ public class GamePanel extends JPanel {
         if (pawn.getEndLocation() != -1 && pawn.getEndLocation() != 6) {
             switch (pawn.getColor()) {
             case BLUE:
-                pawn.gLoc.x = this.cellW * 7;
-                pawn.gLoc.y = this.cellH * (13 - pawn.getEndLocation());
+                pawn.getgLoc().x = this.cellW * 7;
+                pawn.getgLoc().y = this.cellH * (13 - pawn.getEndLocation());
                 break;
             case RED:
-                pawn.gLoc.x = this.cellW * (1 + pawn.getEndLocation());
-                pawn.gLoc.y = this.cellH * 7;
+                pawn.getgLoc().x = this.cellW * (1 + pawn.getEndLocation());
+                pawn.getgLoc().y = this.cellH * 7;
                 break;
             case GREEN:
-                pawn.gLoc.x = this.cellW * 7;
-                pawn.gLoc.y = this.cellH * (1 + pawn.getEndLocation());
+                pawn.getgLoc().x = this.cellW * 7;
+                pawn.getgLoc().y = this.cellH * (1 + pawn.getEndLocation());
                 break;
             case YELLOW:
-                pawn.gLoc.x = this.cellW * (13 - pawn.getEndLocation());
-                pawn.gLoc.y = this.cellH * 7;
+                pawn.getgLoc().x = this.cellW * (13 - pawn.getEndLocation());
+                pawn.getgLoc().y = this.cellH * 7;
                 break;
             default:
                 System.out.println("Exception : GamePanel.getOnMap() : Unexpected color value.");
                 break;
             }
 
-            pawn.target = new Rectangle(pawn.gLoc.x, pawn.gLoc.y, cellW, cellW);
+            pawn.setTarget(pawn.getgLoc().x, pawn.getgLoc().y, cellW, cellW);
 
         } // The pawn has finished
         else if (pawn.getEndLocation() == 6) {
             switch (pawn.getColor()) {
             case BLUE:
-                pawn.gLoc.x = this.cellW * 7;
-                pawn.gLoc.y = this.cellH * 8;
+                pawn.getgLoc().x = this.cellW * 7;
+                pawn.getgLoc().y = this.cellH * 8;
                 break;
             case RED:
-                pawn.gLoc.x = this.cellW * 6;
-                pawn.gLoc.y = this.cellH * 7;
+                pawn.getgLoc().x = this.cellW * 6;
+                pawn.getgLoc().y = this.cellH * 7;
                 break;
             case GREEN:
-                pawn.gLoc.x = this.cellW * 7;
-                pawn.gLoc.y = this.cellH * 6;
+                pawn.getgLoc().x = this.cellW * 7;
+                pawn.getgLoc().y = this.cellH * 6;
                 break;
             case YELLOW:
-                pawn.gLoc.x = this.cellW * 8;
-                pawn.gLoc.y = this.cellH * 7;
+                pawn.getgLoc().x = this.cellW * 8;
+                pawn.getgLoc().y = this.cellH * 7;
                 break;
             default:
                 System.out.println("Exception : GamePanel.getOnMap() : Unexpected color value.");
                 break;
             }
-            pawn.target = new Rectangle(-10, -10, 1, 1);
+            pawn.setTarget(-10, -10, 1, 1);
         } // The pawn is in its base
         else if (pawn.getLocation() == -1) {
             int x = 0, y = 0;
@@ -233,11 +230,11 @@ public class GamePanel extends JPanel {
                 break;
             }
             // We set the graphical location of the pawn
-            pawn.gLoc.x = x;
-            pawn.gLoc.y = y;
+            pawn.getgLoc().x = x;
+            pawn.getgLoc().y = y;
 
             // We create a target on the pawn
-            pawn.target = new Rectangle(x, y, cellW, cellW);
+            pawn.setTarget(x, y, cellW, cellW);
 
         } // The pawn is on the board but not on its final line
         else if (pawn.getLocation() != -1) {
@@ -285,11 +282,11 @@ public class GamePanel extends JPanel {
             }
 
             // We set the graphical location of the pawn
-            pawn.gLoc.x = x;
-            pawn.gLoc.y = y;
+            pawn.getgLoc().x = x;
+            pawn.getgLoc().y = y;
 
             // We create a target on the pawn
-            pawn.target = new Rectangle(x, y, cellW, cellW);
+            pawn.setTarget(x, y, cellW, cellW);
         }
     }
 

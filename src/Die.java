@@ -37,13 +37,13 @@ public class Die {
 			counter++;
 			int newRollValue = random.nextInt(6) + 1;
 			this.value += newRollValue;
-			Board.infoPanel.showRoll(newRollValue, (newRollValue == 6 && counter < 3), this.value);
+			Board.getInfoPanel().showRoll(newRollValue, (newRollValue == 6 && counter < 3), this.value);
 		} while (this.value % 6 == 0 && counter < 3);
 
 		// If he got three 6, the turn passes
 		if (this.value == 18) {
 			this.value = 0;
-			Board.infoPanel.showPass();
+			Board.getInfoPanel().showPass();
 		}
 
 		return value;

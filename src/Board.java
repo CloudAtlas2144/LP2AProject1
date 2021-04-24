@@ -10,16 +10,16 @@ public class Board {
     private static ArrayList<Pawn> mainArray;
 
     /** Arrays containing all the pawns of the game. */
-    public static Pawns pBlue, pRed, pGreen, pYellow;
+    private static Pawns pBlue, pRed, pGreen, pYellow;
 
     /** Groups all the {@code Pawns} in one array. */
-    public static Pawns[] allPawns;
+    private static Pawns[] allPawns;
 
     /** Reference to the instance of {@code GamePanel}. */
-    public static GamePanel gamePanel;
+    private static GamePanel gamePanel;
 
     /** Reference to the instance of {@code InfoPanel}. */
-    public static InfoPanel infoPanel;
+    private static InfoPanel infoPanel;
 
     /**
      * Initializes the different arrays containing the pawns and instantiates a
@@ -45,6 +45,18 @@ public class Board {
 
     public static ArrayList<Pawn> getMainArray() {
         return mainArray;
+    }
+
+    public static Pawns[] getAllPawns() {
+        return allPawns;
+    }
+
+    public static GamePanel getGamePanel() {
+        return gamePanel;
+    }
+
+    public static InfoPanel getInfoPanel() {
+        return infoPanel;
     }
 
     /**
@@ -330,26 +342,26 @@ public class Board {
         pGreen.start();
         pYellow.start();
 
-        startingP = pRed.starter;
+        startingP = pRed.startRoll;
         startingColor = pRed.color;
 
-        if (startingP < pBlue.starter) {
+        if (startingP < pBlue.startRoll) {
 
             startingColor = pBlue.color;
-            startingP = pBlue.starter;
+            startingP = pBlue.startRoll;
         }
 
-        if (startingP < pGreen.starter) {
+        if (startingP < pGreen.startRoll) {
 
             startingColor = pGreen.color;
-            startingP = pGreen.starter;
+            startingP = pGreen.startRoll;
 
         }
 
-        if (startingP < pYellow.starter) {
+        if (startingP < pYellow.startRoll) {
 
             startingColor = pYellow.color;
-            startingP = pYellow.starter;
+            startingP = pYellow.startRoll;
 
         }
 

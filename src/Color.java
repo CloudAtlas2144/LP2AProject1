@@ -7,7 +7,7 @@ public enum Color {
 
     private final int color;
 
-    Color(int color) {
+    private Color(int color) {
         this.color = color;
     }
 
