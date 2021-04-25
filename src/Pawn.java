@@ -153,15 +153,15 @@ public class Pawn implements Cloneable {
     public boolean moveEndLocation(int die) {
 
         if (die > 6) {
-
-            die = 0;
-
+            return false;
         }
 
-        if (this.isDoubled() != null && die % 2 == 0) {
-
-            die = die / 2;
-
+        if (this.isDoubled != null) {
+            if (die % 2 == 0) {
+                die = die / 2;
+            } else {
+                return false;
+            }
         }
 
         if (this.endLocation + die < 6) {
